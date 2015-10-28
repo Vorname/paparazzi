@@ -1,0 +1,500 @@
+   69  cd Dokumente/tor-browser_de/
+   70  ./start-tor-browser.desktop 
+   71  ./start-tor-browser.desktop 
+   72  cd Dokumente/tor
+   73  cd Dokumente/tor-browser_de/
+   74  ./start-tor-browser.desktop 
+   75  cd Dokumente/tor-browser_de/
+   76  ./start-tor-browser.desktop 
+   77  cd Dokumente/tor-browser_de/
+   78  ./start-tor-browser.desktop 
+   79  ./start-tor-browser.desktop 
+   80  cd Dokumente/tor-browser_de/
+   81  ./start-tor-browser.desktop 
+   82  cd Dokumente/tor-browser_de/
+   83  ./start-tor-browser.desktop 
+   84  sudo apt-get update
+   85  sudo apt-get upgrade
+   86  cd Dokumente/tor-browser_de/
+   87  ./start-tor-browser.desktop 
+   88  sudo apt-get update
+   89  sudo apt-get upgrade
+   90  ./start-tor-browser.desktop 
+   91  cd Dokumente/tor-browser_de/
+   92  ./start-tor-browser.desktop 
+   93  ./start-tor-browser.desktop 
+   94  sudo apt-get install libsfml-dev
+   95  g++ -c main.cpp
+   96  ls
+   97  g++ main.o -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system
+   98  ./sfml-app
+   99  cd Dokumente/tor
+  100  cd Dokumente/tor-browser_de/
+  101  ./start-tor-browser.desktop 
+  102  ls
+  103  g++ -c sfmltest.cpp
+  104  g++ sfmltest.o -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system
+  105  g++ sfmltest.o -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system
+  106  g++ -c sfmltest.hpp
+  107  g++ sfmltest.hpp.gch -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system
+  108  ls
+  109  sfmltest.hpp.gch -info
+  110  info gch
+  111  g++ -c sfmltest.cpp
+  112  ls
+  113  g++ sfmltest.o -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system
+  114  g++ -c sfmltest.cpp
+  115  ls
+  116  g++ sfmltest.o -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system
+  117  ./sfml-app 
+  118  ./sfml-app 
+  119  ./sfml-app 
+  120  ./sfml-app 
+  121  q
+  122  ra
+  123  q
+  124  cd
+  125  cd
+  126  sudo apt-get update
+  127  sudo apt-get upgrade 
+  128  man g++
+  129  ls
+  130  cd workspace/
+  131  ls
+  132  cd sfml/
+  133  ls
+  134  sfl-
+  135  sfl-app
+  136  sfml-app
+  137  ./sfml-app 
+  138  gcc --version
+  139  g++ -shared sfmltest.cpp
+  140  g++ -o sfmltest.cpp
+  141  cd ..
+  142  ls
+  143  cd sfml
+  144  g++ -o sfmltest.cpp
+  145  g++ -c sfmltest.cpp
+  146  ls
+  147  g++ -o sfmltest.o
+  148  g++ sfmltest.o sfml-app -sflm-graghics -lsfml-window -lfsm-system
+  149  g++ sfmltest.o sfml-app -sflm-graphics -lsfml-window -lfsm-system
+  150  g++ sfmltest.o sfml-app -lsflm-graphics -lsfml-window -lfsm-system
+  151  g++ sfmltest -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system
+  152  g++ sfmltest.o -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system
+  153  ls
+  154  g++ sfmltest.o -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system
+  155  l
+  156  ls
+  157  del sfmltest.o
+  158  man rmov
+  159  rm sfmltest.o
+  160  g++ sfmltest.cpp -shared -lsfml-window -lsfml-system
+  161  g++ sfmltest.cpp -o
+  162  g++ -o  sfmltest.cpp
+  163  g++ sfmltest.cpp -o sfmltest.o
+  164  g++ -c sfmltest.cpp
+  165  g++ -c sfmltest.cpp -lsfml-window -lsfml-system
+  166  g++ sfmltest.o -shared -lsfml-window -lsfml-system
+  167  ls
+  168  sm sfmltest.o
+  169  rm sfmltest.o
+  170  g++ sfmltest.cpp -shared
+  171  g++ sfmltest.cpp -shared -lsfml-window -lsfml-system
+  172  cd ..
+  173  cd..
+  174  cd ..
+  175  ls
+  176  cd ..
+  177  ls
+  178  cd ..
+  179  cd usr/bin/ld
+  180  cd usr/bin/
+  181  ls
+  182  cd ls:
+  183  cd ..
+  184  mkdir libraryTest
+  185  sudo mkdir libTest
+  186  ls
+  187  rm libTest
+  188  rm -r libTest
+  189  sudo rm -r libTest
+  190  ls
+  191  cd ..
+  192  ls
+  193  g++ -c sfmltest.cpp -o /temp.o
+  194  g++ -c sfmltest.cpp -o temp.o
+  195  ls
+  196  g++ -shared temp.o -o SFMLDLL
+  197  touch test.txt
+  198  ls
+  199  shred -n 10000 test.txt
+  200  ls
+  201  touch test.txt
+  202  gnome-open test.txt
+  203  shred -n 2 test.txt
+  204  nano test.txt
+  205  rm test.txt 
+  206  ls
+  207  rm temp.o
+  208  gcc -c sfmltest.cpp
+  209  ls
+  210  rm sfmltest.o
+  211  gcc -c -fpic sfmltest.cpp -lsfml-graphics -lsfml-audio -lsfml-window -lsfml-network  -lsfml-system
+  212  ls
+  213  gcc -shared -o sfmlDLL.so sfmltest.o
+  214  ls
+  215  touch sfmlDLL.hpp
+  216  gnome-open sfmlDLL.hpp
+  217  sudo mkdir include
+  218  sudo mkdir lib
+  219  mv sfmlDLL.so /lib
+  220  sudo mv sfmlDLL.so /lib
+  221  sudo mv sfmltest.o /lib
+  222  sudo mv sfmlDll.hpp /include
+  223  sudo mv sfmlDLL.hpp /include
+  224  .. cd
+  225  .. cd
+  226  cd ..
+  227  cd ..
+  228  export LD_LIBRARY_PATH=~/workspace/sfmlLib/lib/:$LD_LIBRARY_PATH
+  229  ls
+  230  gcc -c -fpic sfmltest.cpp
+  231  ls
+  232  gcc -shared -o sfmltestDLL sfmltest.o -lsfml-graphics -lsfml-window -lsfml-network -lsfml-audio -lsfml-system
+  233  ls
+  234  cd Dokumente/tor-browser_de/
+  235  ./start-tor-browser.desktop 
+  236  cd Dokumente/tor-browser_de/
+  237  ./start-tor-browser.desktop 
+  238  cd Dokumente/tor-browser_de/
+  239  ./start-tor-browser.desktop 
+  240  cd Dokumente/tor-browser_de/
+  241  ./start-tor-browser.desktop 
+  242  cd Dokumente/tor-browser_de/
+  243  ./start-tor-browser.desktop 
+  244  cd Dokumente/tor-browser_de/
+  245  ./start-tor-browser.desktop 
+  246  cd Dokumente/tor-browser_de/
+  247  ./start-tor-browser.desktop 
+  248  cd Dokumente/tor-browser_de/
+  249  ./start-tor-browser.desktop 
+  250  sudo apt-get update
+  251  sudo apt-get upgrade
+  252  cd Dokumente/tor-browser_de/
+  253  ./start-tor-browser.desktop 
+  254  ./
+  255  ./start-tor-browser.desktop 
+  256  cd Dokumente/tor-browser_de/
+  257  ./start-tor-browser.desktop 
+  258  cd Dokumente/tor-browser_de/
+  259  ./start-tor-browser.desktop 
+  260  cd Dokumente/tor-browser_de/st
+  261  cd Dokumente/tor-browser_de/
+  262  ./start-tor-browser.desktop 
+  263  cd Dokumente/tor-browser_de/start-tor-browser.desktop
+  264  Dokumente/tor-browser_de/start-tor-browser.desktop 
+  265  Dokumente/tor-browser_de/start-tor-browser.desktop 
+  266  Dokumente/tor-browser_de/start-tor-browser.desktop 
+  267  cd Dokumente/tor-browser_de/
+  268  ./start-tor-browser.desktop 
+  269  cd Dokumente/tor-browser_de/
+  270  ./start-tor-browser.desktop 
+  271  cd Dokumente/tor-browser_de/
+  272  ./start-tor-browser.desktop 
+  273  cd Dokumente/tor-browser_de/
+  274  ./start-tor-browser.desktop 
+  275  cd Dokumente/tor-browser_de/
+  276  ./start-tor-browser.desktop 
+  277  cd Dokumente/tor-browser_de/
+  278  ./start-tor-browser.desktop 
+  279  cd Dokumente/tor-browser_de/
+  280  ./start-tor-browser.desktop 
+  281  cd Dokumente/tor-browser_de
+  282  ./start-tor-browser.desktop 
+  283  ./start-tor-browser.desktop 
+  284  cd Dokumente/tor-browser_de/
+  285  /.s
+  286  ./start-tor-browser.desktop 
+  287  cd Dokumente/tor-browser_de/
+  288  ./start-tor-browser.desktop 
+  289  ./start-tor-browser.desktop 
+  290  ./start-tor-browser.desktop 
+  291  sudo apt-get update
+  292  sudo apt-get upgrade 
+  293  cd Dokumente/tor-browser_de/
+  294  ./start-tor-browser.desktop 
+  295  tor
+  296  cd //
+  297  cd ;;
+  298  cd ..
+  299  cd
+  300  cd ..
+  301  cd
+  302  cd //
+  303  cd
+  304  ls
+  305  ls -a | sort
+  306  cd //
+  307  ls
+  308  cd lost+found/
+  309  sudo cd lost+found/
+  310  cd lost+found/
+  311  sudo lost+found/
+  312  sudo
+  313  cd ..
+  314  cd ..
+  315  cd ..
+  316  cd
+  317  cd ..
+  318  cd ..
+  319  cd ..
+  320  ls
+  321  cd lost+found/
+  322  ls -a | sort
+  323  cd
+  324  mkdir cd
+  325  ls
+  326  cd cd
+  327  cd ..
+  328  rm cd
+  329  sm
+  330  rm
+  331  rm --help
+  332  ls
+  333  rm cd -r
+  334  ls
+  335  cd //
+  336  ls
+  337  cd tmp
+  338  ls
+  339  cd ..
+  340  cd etc
+  341  ls
+  342  cd passwd
+  343  info passwd
+  344  info gshadow
+  345  cd
+  346  dc
+  347  dc
+  348  cd /etc
+  349  ls
+  350  cd
+  351  find testdisk
+  352  testdisk
+  353  sudo apt-get install gnome-enfcs-manager
+  354  cryptkeeper
+  355  sudo apt-get install cryptkeeper
+  356  apt-get autoremove
+  357  cryptkeeper
+  358  cryptkeeper
+  359  cryptkeeper
+  360  sudo apt-get install encfs
+  361  sudo gpasswd -a $USER fuse
+  362  newgrp fuse 
+  363  cryptkeeper
+  364  encfs ~/.foo ~/foo
+  365  ls
+  366  ls -a
+  367  cd .foo
+  368  ls
+  369  fusermount -u ~/foo
+  370  ls
+  371  cd
+  372  cd foo
+  373  ls
+  374  encfs ~/.foo /foo
+  375  sudo apt-get update && apt-get upgrade -Y
+  376  sudo apt-get update && sudo apt-get upgrade
+  377  sudo apt-get upgrade
+  378  sudo apt-get install steam
+  379  cd Dokumente/
+  380  cd tor-browser_de/
+  381  ./start-tor-browser.desktop 
+  382  cd Dokumente/tor-browser_de/
+  383  ./start-tor-browser.desktop 
+  384  cd Dokumente/tor-browser_de/
+  385  ./t
+  386  ./start-tor-browser.desktop 
+  387  cd Dokumente/tor-browser_de/
+  388  ./start-tor-browser.desktop 
+  389  ./start-tor-browser.desktop 
+  390  cd Dokumente/tor-browser_de/
+  391  ./start-tor-browser.desktop 
+  392  cd Dokumente/tor-browser_de/
+  393  ./start-tor-browser.desktop 
+  394  cd Dokumente/tor-browser_de/
+  395  ./start-tor-browser.desktop 
+  396  sudo apt-get upgrade
+  397  sudo apt-get update
+  398  cd Dokumente/tor-browser_de/
+  399  ./start-tor-browser.desktop 
+  400  cd Dokumente/tor-browser_de/
+  401  ./start-tor-browser.desktop 
+  402  cd Dokumente/tor-browser_de/
+  403  ./start-tor-browser.desktop 
+  404  cd Dokumente/tor-browser_de/
+  405  ./start-tor-browser.desktop 
+  406  cd Dokumente/tor-browser_de/
+  407  ./start-tor-browser.desktop 
+  408  cd Dokumente/tor-browser_de/
+  409  ./start-tor-browser.desktop 
+  410  cd Dokumente/tor-browser_de/
+  411  ./start-tor-browser.desktop 
+  412  cd Dokumente/tor-browser_de/
+  413  ./start-tor-browser.desktop 
+  414  cd Dokumente/tor
+  415  cd Dokumente/tor-browser_de/
+  416  ./start-tor-browser.desktop 
+  417  cd Dokumente/tor-browser_de/
+  418  ./start-tor-browser.desktop 
+  419  cd Dokumente/tor-browser_de/
+  420  ./start-tor-browser.desktop 
+  421  cd Dokumente/tor-browser_de/
+  422  ./start-tor-browser.desktop 
+  423  cd Dokumente//tor-browser_de/
+  424  ./start-tor-browser.desktop 
+  425  cd Dokumente/tor-browser_de/
+  426  ./start-tor-browser.desktop 
+  427  cd Dokumente/tor-browser_de/
+  428  ./start-tor-browser.desktop 
+  429  cd Dokumente/tor-browser_de/
+  430  ./start-tor-browser.desktop 
+  431  cd Dokumente/tor-browser_de/
+  432  ./start-tor-browser.desktop 
+  433  cd Dokumente/tor-browser_de/
+  434  ./start-tor-browser.desktop 
+  435  cd Dokumente/tor-browser_de/
+  436  ./start-tor-browser.desktop 
+  437  cd ..
+  438  cd ..
+  439  find otoctave
+  440  find qtoctave
+  441  find octave
+  442  find Octave
+  443  man find
+  444  cd Dokumente/tor-browser_de/
+  445  ./start-tor-browser.desktop 
+  446  cd Dokumente/tor-browser_de/
+  447  ./start-tor-browser.desktop 
+  448  cd Dokumente/tor-browser_de/
+  449  ./start-tor-browser.desktop 
+  450  man echo
+  451  cd
+  452  echo $qtoctave
+  453  cd Dokumente/tr
+  454  cd Dokumente/tos
+  455  cd Dokumente/tor-browser_de/
+  456  ./start-tor-browser.desktop 
+  457  aptitude search ?description\(octave-forge\)
+  458  sudo apt-get install octave-image
+  459  sudo apt-get update
+  460  sudo apt-get inst
+  461  sudo apt-get install octave-io
+  462  cd Dokumente/tor-browser_de/
+  463  ./start-tor-browser.desktop 
+  464  cd Dokumente/tor-browser_de/
+  465  ./start-tor-browser.desktop 
+  466  ./start-tor-browser.desktop 
+  467  cd Dokumente/tor-browser_de/
+  468  cd Dokumente/tor-browser_de/
+  469  ./start-tor-browser.desktop 
+  470  cd Dokumente/tor-browser_de/
+  471  ./start-tor-browser.desktop 
+  472  cd Dokumente/tor-browser_de/
+  473  ./start-tor-browser.desktop 
+  474  cd Dokumente/tor-browser_de/
+  475  ./start-tor-browser.desktop 
+  476  rm -R iujhvyujlv/
+  477  cd Dokumente/tor-browser_de/
+  478  ./start-tor-browser.desktop 
+  479  cd Dokumente/tor-browser_de/
+  480  ./start-tor-browser.desktop 
+  481  cd Dokumente/tor-browser_de/
+  482  ./st
+  483  ./start-tor-browser.desktop 
+  484  cd Dokumente/tor-browser_de/
+  485  ./start-tor-browser.desktop 
+  486  eclipse
+  487  ls
+  488  cd Dokumente/to
+  489  cd Dokumente/tor-browser_de/
+  490  ./start-tor-browser.desktop 
+  491  cd Dokumente/tor-browser_de/
+  492  ./ts
+  493  ./start-tor-browser.desktop 
+  494  cd Dokumente/tor-browser_de/
+  495  ./start-tor-browser.desktop 
+  496  cd Dokumente/tor-browser_de/
+  497  ./start-tor-browser.desktop 
+  498  cd Dokumente/tor-browser_de/
+  499  ./start-tor-browser.desktop 
+  500  git clone https://github.com/Vorname/paparazzi.git
+  501  sudo apt-get install git
+  502  apt-get moo
+  503  git clone https://github.com/Vorname/paparazzi.git
+  504  ls
+  505  cd paparzzi
+  506  cd paparazzi/
+  507  ls
+  508  ls -a
+  509  git status
+  510  touch tukky
+  511  git status 
+  512  git add tukky 
+  513  git status 
+  514  git commit 
+  515  git config --global user.email "johannes.dambacher@web.de"
+  516  git config --global user.name "Vorname"
+  517  git commit 
+  518  git status
+  519  git remote 
+  520  git remote -v
+  521  git log 
+  522  git branch 
+  523  git branch -a
+  524  git checkout origin/christoph-wall-avoid -b wall-avoid
+  525  git branch 
+  526  git merge FINken 
+  527  ls
+  528  git log
+  529  git checkout -b Test
+  530  git branch
+  531  git log
+  532  history 
+  533  git branch
+  534  git checkout FINken 
+  535  nano tukky 
+  536  git status 
+  537  git checkout Test
+  538  git commit -m "Test"
+  539  git add tukky
+  540  git commit -m "Test"
+  541  git checkout FINken 
+  542  nano tukky
+  543  git checkout Test
+  544  git stash 
+  545  git checkout Test
+  546  git stash show
+  547  git checkout FINken 
+  548  git stash pop
+  549  git checkout -- tukky
+  550  git branch -d Test
+  551  git branch -D Test
+  552  git branch
+  553  git branch -d wall-avoid 
+  554  git branch -D wall-avoid 
+  555  git revert HEAD
+  556  ls
+  557  git loj
+  558  git loj
+  559  git log
+  560  git revert a9f7902b9db2adcc8110f561e65f36a53cf10c08
+  561  ls
+  562  git revert a9f7902b9db2adcc8110f561e65f36a53cf10c08
+  563  git revert HEAD
+  564  ls
+  565  git rebase -i HEAD^^^^^^^^^^^^^^^^^^^^^^^^
+  566  git log
+  567  ls
+  568  history > GIT_COMMANDS
