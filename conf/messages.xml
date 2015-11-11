@@ -1132,7 +1132,20 @@
 		<field name="acceleration_y"   type="float" alt_unit="m/s^2"/>
 		<field name="acceleration_z"   type="float" alt_unit="m/s^2"/>
   </message>
-
+  <message name="FINKEN_WALL_AVOID" id="218">
+    <field name="z" type="float" alt_unit="m"/>
+    <field name="pitchIn" type="float"/>
+    <field name="rollIn" type="float"/>
+    <field name="pitchOut" type="float"/>
+    <field name="rollOut" type="float"/>
+    <field name="rollError" type="float"/>
+    <field name="pitchError" type="float"/>
+    <field name="front" type="float" alt_unit="m"/>
+    <field name="back" type="float" alt_unit="m"/>
+    <field name="left" type="float" alt_unit="m"/>
+    <field name="right" type="float" alt_unit="m"/>
+    <field name="thrust" type="float" alt_unit="%"/>
+  </message>
 
   <message name="IMU_TURNTABLE" id="220">
     <field name="omega" type="float" unit="rad/s" alt_unit="deg/s" alt_unit_coef="57.29578"/>

@@ -1,0 +1,6 @@
+<airframe>
+	<section name="FINKEN" prefix="FINKEN_WALL_AVOID_">
+		<define name="ROLL_OFFSET" value="0.0"/>
+		<define name="PITCH_OFFSET" value="1.7"/>
+	</section>
+</airframe>

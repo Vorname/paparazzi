@@ -11,13 +11,19 @@
     <define name="GYRO_Y_SENS" value="4.359" integer="16"/>
     <define name="GYRO_Z_SENS" value="4.359" integer="16"/>
 
-    <define name="ACCEL_X_NEUTRAL" value="0"/>
+    <!--<define name="ACCEL_X_NEUTRAL" value="0"/>
     <define name="ACCEL_Y_NEUTRAL" value="0"/>
     <define name="ACCEL_Z_NEUTRAL" value="0"/>
 
     <define name="ACCEL_X_SENS" value="4.905" integer="16"/>
     <define name="ACCEL_Y_SENS" value="4.905" integer="16"/>
-    <define name="ACCEL_Z_SENS" value="4.905" integer="16"/>
+    <define name="ACCEL_Z_SENS" value="4.905" integer="16"/>-->
+    <define name="ACCEL_X_NEUTRAL" value="42"/>
+    <define name="ACCEL_Y_NEUTRAL" value="33"/>
+    <define name="ACCEL_Z_NEUTRAL" value="-223"/>
+    <define name="ACCEL_X_SENS" value="4.88247449573" integer="16"/>
+    <define name="ACCEL_Y_SENS" value="4.87926667476" integer="16"/>
+    <define name="ACCEL_Z_SENS" value="4.84354839819" integer="16"/>
 
     <!-- Magdeburg measured by Martin -->
     <define name="MAG_X_NEUTRAL" value="77"/>

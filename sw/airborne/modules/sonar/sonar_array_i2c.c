@@ -123,7 +123,7 @@ void sonar_array_i2c_init(void)
 	}
 
 	for (unsigned int i = START; i < END; i++)
-		setSonarValue(i, 2.0f);
+		setSonarValue(i, 7.5f);
 
 	for(unsigned int i=START; i<END; i++)
 		sonarState[i] = READY;

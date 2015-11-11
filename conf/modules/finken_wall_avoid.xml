@@ -10,13 +10,9 @@
     <file name="finken_wall_avoid.h" />
   </header>
   <init fun="finken_wall_avoid_init()" />
-  <periodic fun="finken_wall_avoid_periodic()" freq="7" />
+  <periodic fun="finken_wall_avoid_periodic()" freq="5" />
   <makefile>
     <file name="finken_wall_avoid.c" />
-		<define name="FINKEN_WALL_AVOID_UPDATE_FREQ"         value="7.0" />
-		<define name="FINKEN_WALL_AVOID_CONTROL_HOLD_TIME"   value="5.7864" />
-		<define name="FINKEN_WALL_AVOID_CONTROL_GAIN"        value="0.0879" />
-		<define name="FINKEN_WALL_AVOID_CONTROL_DELAY_TIME"  value="1.4124"/>
 	</makefile>
 
 </module>

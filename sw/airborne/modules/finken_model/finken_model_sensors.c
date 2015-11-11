@@ -37,15 +37,31 @@
 	#include "modules/finken_ir_adc/finken_ir_adc.h"
 #endif
 
+#define BufSize 5
+
 struct sensor_model_s finken_sensor_model;
 int64_t temp_mult;
 uint32_t last_ts;
 
-static const float maxZ = FINKEN_MAX_Z;
-static const float minZ = FINKEN_MIN_Z;
+static const float maxZ    = FINKEN_MAX_Z;
+static const float minZ    = FINKEN_MIN_Z;
+static const float maxDist = FINKEN_MAX_DIST;
+static const float minDist = FINKEN_MIN_DIST;
 
+static float frontBuf[BufSize];
+static float backBuf[BufSize];
+static float leftBuf[BufSize];
+static float rightBuf[BufSize];
+static int i;
+static bool init;
 void finken_sensor_model_init(void)
 {
+  i = 0;
+  init = false;
+  frontBuf[0] = maxDist;
+  leftBuf[0] = maxDist;
+  backBuf[0] = maxDist;
+  rightBuf[0] = maxDist;
   memset(&finken_sensor_model, 0, sizeof(struct sensor_model_s));
 
   register_periodic_telemetry(DefaultPeriodic, "FINKEN_SENSOR_MODEL", send_finken_sensor_model_telemetry);
@@ -71,10 +87,46 @@ void finken_sensor_model_periodic(void)
   memcpy(&finken_sensor_model.acceleration, &imu.accel, sizeof(struct Int32Vect3));
 
 #ifdef  USE_SONAR_TOWER
-	finken_sensor_model.distance_d_front = sonar_values.front;
-	finken_sensor_model.distance_d_right = sonar_values.right;
-	finken_sensor_model.distance_d_back  = sonar_values.back;
-	finken_sensor_model.distance_d_left  = sonar_values.left;
+	int newI = (i+1)%BufSize;
+	if( sonar_values.front < maxDist &&  sonar_values.front > minDist)
+		frontBuf[newI] = sonar_values.front;
+	else
+		frontBuf[newI] = frontBuf[i];
+
+	if( sonar_values.back < maxDist &&  sonar_values.back > minDist)
+		backBuf[newI] = sonar_values.back;
+	else
+		backBuf[newI] = backBuf[i];
+
+	if( sonar_values.left < maxDist &&  sonar_values.left > minDist)
+		leftBuf[newI] = sonar_values.left;
+	else
+		leftBuf[newI] = leftBuf[i];
+
+	if( sonar_values.right < maxDist &&  sonar_values.right > minDist)
+		rightBuf[newI] = sonar_values.right;
+	else
+		rightBuf[newI] = rightBuf[i];
+
+	if(init) {
+		int j;
+		finken_sensor_model.distance_d_front = 0;
+		finken_sensor_model.distance_d_back = 0;
+		finken_sensor_model.distance_d_left = 0;
+		finken_sensor_model.distance_d_right = 0;
+		for(j=0;j<BufSize;j++)	{
+			finken_sensor_model.distance_d_front += frontBuf[j];
+			finken_sensor_model.distance_d_back  += backBuf[j];
+			finken_sensor_model.distance_d_left  += leftBuf[j];
+			finken_sensor_model.distance_d_right += rightBuf[j];
+		}
+		finken_sensor_model.distance_d_front /= BufSize;
+		finken_sensor_model.distance_d_back  /= BufSize;
+		finken_sensor_model.distance_d_left  /= BufSize;
+		finken_sensor_model.distance_d_right /= BufSize;
+	} else if(newI==0)
+		init = true;
+	i = newI;
 #endif
 
 	if(newZ < maxZ && newZ > minZ){

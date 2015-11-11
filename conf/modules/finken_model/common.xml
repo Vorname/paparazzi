@@ -2,5 +2,7 @@
 	<section name="FINKEN" prefix="FINKEN_" >
 		<define name="MAX_Z" value="3.0" />
 		<define name="MIN_Z" value="0.2" />
+		<define name="MAX_DIST" value="300" />
+		<define name="MIN_DIST" value="20" />
 	</section>
 </airframe>
