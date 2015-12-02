@@ -14,26 +14,70 @@
 		<block name="default">
 			<set value="0" var="finken_system_model_control_height"/> 
 			<attitude pitch="0.0" roll="0.0" throttle="0.0" until="stage_time > 30" vmode="throttle" />
-			<deroute block="start"/>
+			<deroute block="1"/>
 		</block>
 
 		<!--<block key="t" name="Takeoff" strip_button="Takeoff" strip_icon="takeoff.png">
       <set value="0" var="kill_throttle"/>
       <set value="0" var="autopilot_flight_time"/>
 			<attitude pitch="0.0" roll="0.0" throttle="compensate_battery_drop(0.40)" until="stage_time > 3" vmode="throttle" />
-			<attitude pitch="0.0" roll="0.0" throttle="compensate_battery_drop(0.50)" until="stage_time > 4" vmode="throttle" />
+			<attitude pitch="0.0" nroll="0.0" throttle="compensate_battery_drop(0.50)" until="stage_time > 4" vmode="throttle" />
 			<deroute block="inair"/>
 		</block>-->
 
-                <block name="start">
+                <block name="1">
+			<set value="0.25" var="finken_system_set_point.z"/> 
+			<set value="1" var="finken_system_model_control_height"/> 
+			<attitude pitch="finken_actuators_set_point.pitch" roll="finken_actuators_set_point.roll" yaw="finken_actuators_set_point.yaw" throttle="finken_actuators_set_point.thrust" until="stage_time > 2"        				vmode="throttle"/>
+			<deroute block="2"/>
+		</block>
+
+		<block name="2">
+			<set value="0.4" var="finken_system_set_point.z"/> 
+			<set value="1" var="finken_system_model_control_height"/> 
+			<attitude pitch="finken_actuators_set_point.pitch" roll="finken_actuators_set_point.roll" yaw="finken_actuators_set_point.yaw" throttle="finken_actuators_set_point.thrust" until="stage_time > 2"        				vmode="throttle"/>
+			<deroute block="3"/>
+		</block>
+	<block name="3">
 			<set value="0.3" var="finken_system_set_point.z"/> 
 			<set value="1" var="finken_system_model_control_height"/> 
-			<attitude pitch="finken_actuators_set_point.pitch" roll="finken_actuators_set_point.roll" yaw="finken_actuators_set_point.yaw" throttle="finken_actuators_set_point.thrust" until="stage_time > 5"        				vmode="throttle"/>
+			<attitude pitch="finken_actuators_set_point.pitch" roll="finken_actuators_set_point.roll" yaw="finken_actuators_set_point.yaw" throttle="finken_actuators_set_point.thrust" until="stage_time > 2"        				vmode="throttle"/>
+			<deroute block="4"/>
+		</block>
+	<block name="4">
+			<set value="0.4" var="finken_system_set_point.z"/> 
+			<set value="1" var="finken_system_model_control_height"/> 
+			<attitude pitch="finken_actuators_set_point.pitch" roll="finken_actuators_set_point.roll" yaw="finken_actuators_set_point.yaw" throttle="finken_actuators_set_point.thrust" 		until="stage_time > 2"        				vmode="throttle"/>
+			<deroute block="5"/>
+		</block>
+	<block name="5">
+			<set value="0.5" var="finken_system_set_point.z"/> 
+			<set value="1" var="finken_system_model_control_height"/> 
+			<attitude pitch="finken_actuators_set_point.pitch" roll="finken_actuators_set_point.roll" yaw="finken_actuators_set_point.yaw" throttle="finken_actuators_set_point.thrust" until="stage_time > 2"        				vmode="throttle"/>
+			<deroute block="6"/>
+		</block>
+
+	<block name="6">
+			<set value="0.6" var="finken_system_set_point.z"/> 
+			<set value="1" var="finken_system_model_control_height"/> 
+			<attitude pitch="finken_actuators_set_point.pitch" roll="finken_actuators_set_point.roll" yaw="finken_actuators_set_point.yaw" throttle="finken_actuators_set_point.thrust" until="stage_time > 2"        				vmode="throttle"/>
+			<deroute block="7"/>
+		</block>
+	<block name="7">
+			<set value="0.7" var="finken_system_set_point.z"/> 
+			<set value="1" var="finken_system_model_control_height"/> 
+			<attitude pitch="finken_actuators_set_point.pitch" roll="finken_actuators_set_point.roll" yaw="finken_actuators_set_point.yaw" throttle="finken_actuators_set_point.thrust" until="stage_time > 2"        				vmode="throttle"/>
+			<deroute block="8"/>
+		</block>
+	<block name="8">
+			<set value="0.8" var="finken_system_set_point.z"/> 
+			<set value="1" var="finken_system_model_control_height"/> 
+			<attitude pitch="finken_actuators_set_point.pitch" roll="finken_actuators_set_point.roll" yaw="finken_actuators_set_point.yaw" throttle="finken_actuators_set_point.thrust" until="stage_time > 2"        				vmode="throttle"/>
 			<deroute block="inair"/>
 		</block>
 
 		<block name="inair">
-			<set value="0.6" var="finken_system_set_point.z"/> 
+			<set value="0.8" var="finken_system_set_point.z"/> 
 			<set value="1" var="finken_system_model_control_height"/> 
 			<attitude pitch="finken_actuators_set_point.pitch" roll="finken_actuators_set_point.roll" yaw="finken_actuators_set_point.yaw" throttle="finken_actuators_set_point.thrust" until="60 > electrical.vsupply" vmode="throttle"/>
 			<deroute block="empty"/>
