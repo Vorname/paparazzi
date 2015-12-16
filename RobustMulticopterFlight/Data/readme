@@ -1,0 +1,14 @@
+2015-11-25
+
+starting position:
+
+1,5m distance to the walls (window direction)
+1m distance to the other walls
+scenarios:
+
+1 autonomous starting and stationary hovering Finken301
+2 autonomous starting and stationary hovering Finken302
+3 autonomous flying Finken301
+4 autonomous flying Finken302
+5 autonomous flying with user input (flying a defined path) Finken301
+6 autonomous flying with user input (flying a defined path) Finken302

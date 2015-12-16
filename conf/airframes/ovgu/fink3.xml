@@ -19,7 +19,7 @@
 			<define name="SERVO_HZ" value="400"/>
 		</subsystem>
 		<subsystem name="telemetry"     type="transparent">
-			<configure name="MODEM_BAUD"  value="B9600"/>
+			<configure name="MODEM_BAUD"  value="B38400"/>
 			<configure name="MODEM_PORT"  value="UART3"/>
 		</subsystem>
 		<subsystem name="imu"           type="aspirin_v2.1"/>
@@ -45,8 +45,9 @@
     <load name="finken_ir_adc.xml">
       <configure name="ADC_IR" value="ADC_3"/>
 		</load>
-    <load name="finken_wall_avoid.xml"/>
-	</modules>
+    <!--<load name="finken_wall_avoid.xml"/>-->
+<load name="finken_rc_passthrough.xml"/>	
+</modules>
 
 	<section name="FINKEN_WALL_AVOID" prefix="FINKEN_WALL_AVOID_"/>
 	<include href="conf/modules/finken_wall_avoid/common.xml"/>

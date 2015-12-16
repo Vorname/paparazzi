@@ -20,6 +20,7 @@
       <message name="INS"                      period="5"/>
       <message name="UART_ERRORS"              period="5"/>
       <message name="FINKEN_IR_ADC"            period="1"/>
+      <message name="RC"            	       period="1"/>
 		</mode>
 		<mode name="extended">
       <message name="FINKEN_SENSOR_MODEL"      period="2.0" />
