@@ -50,14 +50,23 @@ void finken_actuators_model_periodic(void) {
 	finken_actuators_model.thrust = compensate_battery_drop(finken_actuators_set_point.thrust);
 }
 
+
 float compensate_battery_drop(float thrust_setpoint) {
-	float thrust = thrust_setpoint + (FINKEN_THRUST_LOW - FINKEN_THRUST_DEFAULT) * (84 - electrical.vsupply) / (84 - 65);
+	if(electrical.vsupply >= (MAX_BAT_LEVEL*10) - 3) // Solange die Akkuspannung groesser als maximale Akkuspannung -3 ist
+		return thrust_setpoint; 
+	uint16_t vsup_loss_procent = 1 - vsup/120;
+	float compThrust = 0.7793256*pow(vsup_loss_procent,3)-0.0512096*pow(vsup_loss_procent,2)+0.0094144*vsup_loss_procent+0.3680203;	
+	float thrust = thrust_setpoint compThrust;
+	
 	if(thrust < 0.2)
 		return 0.2;
 	else if(thrust > 1.0)
 		return 1.0;
 	return thrust;
 }
+
+
+
 void send_finken_actuators_model_telemetry(struct transport_tx *trans, struct link_device* link)
 {
 	trans=trans;
