@@ -9,26 +9,32 @@
 		#include "modules/finken_model/finken_model_actuators.h"
 		#include "modules/finken_model/finken_model_system.h"
 		#include "subsystems/electrical.h"
+		#include "modules/finken_model/finken_model_sensors.h"
 	</header>
 	<blocks>
 		<block name="default">
 			<set value="0" var="finken_system_model_control_height"/> 
 			<attitude pitch="0.0" roll="0.0" throttle="0.0" until="stage_time > 30" vmode="throttle" />
-			<deroute block="inair"/>
+			<deroute block="start1"/>
 		</block>
 
+		<block name="start1">
+			<set value="0" var="finken_system_model_control_height"/> 
+			<attitude pitch="finken_actuators_set_point.pitch" roll="finken_actuators_set_point.roll" yaw="finken_actuators_set_point.yaw" throttle="0.36" until="31 > stage_time " 			vmode="throttle"/>
+			<deroute block="start2"/>
+		</block>
+
+
+		<block name="start2">
+			<set value="0" var="finken_system_model_control_height"/> 
+			<attitude pitch="finken_actuators_set_point.pitch" roll="finken_actuators_set_point.roll" yaw="finken_actuators_set_point.yaw" throttle="0.36" until="0.5 > pos_z" 			vmode="throttle"/>
+			<deroute block="inair"/>
+		</block>
 
 		<block name="inair">
 			<set value="0.6" var="finken_system_set_point.z"/> 
 			<set value="1" var="finken_system_model_control_height"/> 
-			<attitude pitch="finken_actuators_set_point.pitch" roll="finken_actuators_set_point.roll" yaw="finken_actuators_set_point.yaw" throttle="finken_actuators_set_point.thrust" until="118 > 				electrical.vsupply" vmode="throttle"/>
-			<deroute block="inair2"/>
-		</block>
-
-		<block name="inair2">
-			<set value="0.6" var="finken_system_set_point.z"/> 
-			<set value="1" var="finken_system_model_control_height"/> 
-			<attitude pitch="finken_actuators_set_point.pitch" roll="finken_actuators_set_point.roll" yaw="finken_actuators_set_point.yaw" throttle="compensate_battery_drop(electrical.vsupply)" until="60 > 			electrical.vsupply" vmode="throttle"/>
+			<attitude pitch="finken_actuators_set_point.pitch" roll="finken_actuators_set_point.roll" yaw="finken_actuators_set_point.yaw" throttle="finken_actuators_set_point.thrust" until="60 > 			electrical.vsupply" vmode="throttle"/>
 			<deroute block="empty"/>
 		</block>
 

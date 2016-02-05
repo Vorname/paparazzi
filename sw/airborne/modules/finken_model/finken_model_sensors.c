@@ -54,6 +54,9 @@ static float leftBuf[BufSize];
 static float rightBuf[BufSize];
 static int i;
 static bool init;
+
+float pos_z;
+
 void finken_sensor_model_init(void)
 {
   i = 0;
@@ -132,6 +135,8 @@ void finken_sensor_model_periodic(void)
 	if(newZ < maxZ && newZ > minZ){
   	finken_sensor_model.pos.z            = POS_BFP_OF_REAL(newZ);
 	}
+
+	pos_z      = POS_FLOAT_OF_BFP(finken_sensor_model.pos.z);
 
 	memcpy(&finken_sensor_model.attitude, stateGetNedToBodyQuat_i(), sizeof(struct Int32Quat));
 	/* x = -y and y = x because of the coord. transformation from sensor to body coord. system */	

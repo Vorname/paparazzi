@@ -45,6 +45,8 @@ struct sensor_model_s {
   struct Int32Vect3  acceleration;
 };
 
+extern float pos_z;
+
 extern struct sensor_model_s finken_sensor_model;
 
 extern void finken_sensor_model_init(void);
