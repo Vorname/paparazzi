@@ -27,8 +27,8 @@
     <define name="MAG_Y_SENS" value="4.23257046218" integer="16"/>
     <define name="MAG_Z_SENS" value="4.69251510987" integer="16"/>
 
-    <define name="BODY_TO_IMU_PHI"   value="0." unit="deg"/>
-    <define name="BODY_TO_IMU_THETA" value="0." unit="deg"/>
+    <define name="BODY_TO_IMU_PHI"   value="-1.5" unit="deg"/>
+    <define name="BODY_TO_IMU_THETA" value="-0.5" unit="deg"/>
     <define name="BODY_TO_IMU_PSI"   value="-90." unit="deg"/>
   </section>
 

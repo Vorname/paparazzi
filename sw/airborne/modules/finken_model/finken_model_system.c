@@ -106,7 +106,7 @@ void finken_system_model_init(void) {
   finken_system_set_point.velocity_x = FINKEN_VELOCITY_DESIRED_Y;
   finken_system_set_point.velocity_y = FINKEN_VELOCITY_DESIRED_X;
 
-  register_periodic_telemetry(DefaultPeriodic, "FINKEN_SYSTEM_SET_POINT", send_finken_system_set_point_telemetry);
+  register_periodic_telemetry(DefaultPeriodic, PPRZ_MSG_ID_FINKEN_SYSTEM_SET_POINT, send_finken_system_set_point_telemetry);
 
 }
 
@@ -158,7 +158,8 @@ void finken_system_model_periodic(void)
 	}
 
 	finken_system_set_point.pitch = rcPitch;
-	finken_system_set_point.roll = rcRoll;
+	finken_system_set_point.roll  = rcRoll;
+	finken_system_set_point.yaw   = rcYaw;
 
 	/*error_x_p = (finken_system_set_point.velocity_x - SPEED_FLOAT_OF_BFP(finken_sensor_model.velocity.x)) * FINKEN_VELOCITY_X_P;
 	error_y_p = (finken_system_set_point.velocity_y - SPEED_FLOAT_OF_BFP(finken_sensor_model.velocity.y)) * FINKEN_VELOCITY_Y_P;

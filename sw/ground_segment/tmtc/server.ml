@@ -31,6 +31,7 @@ open Printf
 open Latlong
 open Server_globals
 open Aircraft
+(*open Intruder*)
 module U = Unix
 module LL = Latlong
 
@@ -100,20 +101,6 @@ let log_xml = fun timeofday data_file ->
 
 let start_time = U.gettimeofday ()
 
-(* Run a command and return its results as a string. *)
-let read_process command =
-  let buffer_size = 2048 in
-  let buffer = Buffer.create buffer_size in
-  let string = String.create buffer_size in
-  let in_channel = Unix.open_process_in command in
-  let chars_read = ref 1 in
-  while !chars_read <> 0 do
-    chars_read := input in_channel string 0 buffer_size;
-    Buffer.add_substring buffer string 0 !chars_read
-  done;
-  ignore (Unix.close_process_in in_channel);
-  Buffer.contents buffer
-
 (* Opens the log files *)
 let logger = fun () ->
   let d = U.localtime start_time in
@@ -126,11 +113,7 @@ let logger = fun () ->
   and data_name = sprintf "%s.data" basename in
   let f = open_out (logs_path // log_name) in
   (* version string with whitespace/newline at the end stripped *)
-  let version_str =
-    try
-      Str.replace_first (Str.regexp "[ \n]+$") "" (read_process (Env.paparazzi_src ^ "/paparazzi_version"))
-    with _ -> "UNKNOWN" in
-  output_string f ("<!-- logged with runtime paparazzi_version " ^ version_str ^ " -->\n");
+  output_string f ("<!-- logged with runtime paparazzi_version " ^  Env.get_paparazzi_version () ^ " -->\n");
   let build_str =
     try
       let f = open_in (Env.paparazzi_home ^ "/var/build_version.txt") in
@@ -185,7 +168,7 @@ let ac_msg = fun messages_xml logging ac_name ac ->
 let cam_max_angle = (Deg>>Rad) 89.
 
 let send_cam_status = fun a ->
-  if a.gps_mode = gps_mode_3D then
+  if a.gps_mode >= gps_mode_3D then
     match a.nav_ref with
         None -> () (* No geo ref for camera target *)
       | Some nav_ref ->
@@ -475,6 +458,9 @@ let replayed = fun ac_id ->
 (* Store of unknown received A/C ids. To be able to report an error only once *)
 let unknown_aircrafts = Hashtbl.create 5
 
+(* Intruders (external aircrafts), e.g. received via ADS-B *)
+let intruders = Hashtbl.create 3
+
 let get_conf = fun real_id id conf_xml ->
   try
     ExtXml.child conf_xml "aircraft" ~select:(fun x -> ExtXml.attrib x "ac_id" = id)
@@ -649,6 +635,64 @@ let listen_acs = fun log timestamp ->
   if !replay_old_log then
     ignore (Tm_Pprz.message_bind "PPRZ_MODE" (ident_msg log timestamp))
 
+let send_intruder_acinfo = fun id intruder ->
+  let cm_of_m_32 = fun f -> Pprz.Int32 (Int32.of_int (truncate (100. *. f))) in
+  let cm_of_m = fun f -> Pprz.Int (truncate (100. *. f)) in
+  let pos = LL.utm_of WGS84 intruder.Intruder.pos in
+  (* TODO: find a better way to map intruders to AC_IDs *)
+  let ac_id = 200 + ((int_of_string id) mod 50) in
+  let ac_info = ["ac_id", Pprz.Int ac_id;
+                 "utm_east", cm_of_m_32 pos.utm_x;
+                 "utm_north", cm_of_m_32 pos.utm_y;
+                 "course", Pprz.Int (truncate (10. *. (Geometry_2d.rad2deg intruder.Intruder.course)));
+                 "alt", cm_of_m_32 intruder.Intruder.alt;
+                 "speed", cm_of_m intruder.Intruder.gspeed;
+                 "climb", cm_of_m intruder.Intruder.climb;
+                 "itow", Pprz.Int64 intruder.Intruder.itow] in
+  Dl_Pprz.message_send my_id "ACINFO" ac_info
+
+let periodic_handle_intruders = fun () ->
+  (* remove old intruders after 10s *)
+  Hashtbl.iter
+    (fun id i ->
+      if (U.gettimeofday () -. i.Intruder.unix_time) > 10.0 then begin
+        (*prerr_endline (sprintf "remove intruder %s" id);*)
+        Hashtbl.remove intruders id
+      end;
+    ) intruders;
+  (* send ACINFO for each active intruder *)
+  Hashtbl.iter (send_intruder_acinfo) intruders
+
+let add_intruder = fun vs ->
+  let id = Pprz.string_assoc "id" vs in
+  let name = Pprz.string_assoc "name" vs in
+  let intruder = Intruder.new_intruder id name in
+  Hashtbl.add intruders id intruder
+
+let update_intruder = fun logging _sender vs ->
+  try
+    let id = Pprz.string_assoc "id" vs in
+    (*prerr_endline (sprintf "update_intruder %s" id);*)
+    if not (Hashtbl.mem intruders id) then
+      add_intruder vs;
+    let i = Hashtbl.find intruders id in
+    let lat = Pprz.int_assoc "lat" vs
+    and lon = Pprz.int_assoc "lon" vs in
+    let geo = make_geo_deg (float lat /. 1e7) (float lon /. 1e7) in
+    i.Intruder.pos <- geo;
+    i.Intruder.alt <- float (Pprz.int_assoc "alt" vs) /. 1000.;
+    i.Intruder.course <- Pprz.float_assoc "course" vs;
+    i.Intruder.gspeed <- Pprz.float_assoc "speed" vs;
+    i.Intruder.climb <- Pprz.float_assoc "climb" vs;
+    i.Intruder.unix_time <- U.gettimeofday ();
+    log logging "ground" "INTRUDER" vs
+  with
+    Failure msg ->
+      prerr_endline ("Error parsing INTRUDER message: "^msg)
+
+(* listen for intruders and log them *)
+let listen_intruders = fun log ->
+  ignore(Ground_Pprz.message_bind "INTRUDER" (update_intruder log))
 
 let send_config = fun http _asker args ->
   let ac_id' = Pprz.string_assoc "ac_id" args in
@@ -824,8 +868,14 @@ let () =
   (* Waits for new aircrafts *)
   listen_acs logging !timestamp;
 
+  (* wait for new external vehicles/intruders *)
+  listen_intruders logging;
+
   (* Forward messages from ground agents to vehicles *)
   ground_to_uplink logging;
+
+  (* call periodic_handle_intruders every second *)
+  ignore (Glib.Timeout.add 1000 (fun () -> periodic_handle_intruders (); true));
 
   (* Waits for client configurations requests on the Ivy bus *)
   ivy_server !http;

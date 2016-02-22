@@ -3,8 +3,10 @@
 <flight_plan alt="152" ground_alt="147" lat0="43 33 50.83" lon0="1 28 52.61" max_dist_from_home="150" name="Rotorcraft Basic (Enac)" security_height="2">
   <header>
 #include "autopilot.h"
+#ifdef dc_Survey
 #define LINE_START_FUNCTION dc_Survey(dc_distance_interval);
 #define LINE_STOP_FUNCTION {dc_autoshoot = DC_AUTOSHOOT_STOP;}
+#endif
   </header>
   <waypoints>
     <waypoint name="HOME" x="0.0" y="0.0"/>
@@ -99,6 +101,12 @@
     </block>
     <block name="landed">
       <attitude pitch="0" roll="0" throttle="0" vmode="throttle" until="FALSE"/>
+    </block>
+    <block name="visualflare">
+      <exception cond="NavDetectGround()" deroute="Holding point"/>
+      <exception cond="!nav_is_in_flight()" deroute="landed"/>
+      <call fun="NavStartDetectGround()"/>
+      <stay climb="nav_descend_vspeed" vmode="climb" wp="p1"/>
     </block>
   </blocks>
 </flight_plan>

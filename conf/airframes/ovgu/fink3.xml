@@ -7,7 +7,10 @@
 
 	<firmware name="rotorcraft">
 		<target name="ap" board="lisa_mx_2.1">
+			<define name="USE_LED_6" value="1"/>
+			<define name="USE_LED_7" value="1"/>
 			<subsystem name="radio_control" type="spektrum">
+				<define name="RADIO_CONTROL_SPEKTRUM_OLD_SIGNS"/>
 				<define name="RADIO_MODE" value="RADIO_FLAP"/>
 				<define name="RADIO_KILL_SWITCH" value="RADIO_GEAR"/>
 
@@ -38,20 +41,30 @@
 			<define name="USE_I2C1" />
 			<define name="I2C1_CLOCK_SPEED" value="5000" />
 		</load>
-    <load name="finken_model.xml" >
-	<define name="USE_SONAR_TOWER"/>
-	<!--<define name="USE_FLOW"/>-->
-    </load>
-    <load name="finken_ir_adc.xml">
-      <configure name="ADC_IR" value="ADC_3"/>
+		<load name="finken_model.xml" >
+			<define name="USE_SONAR_TOWER"/>
+			<define name="NO_GPS_NEEDED_FOR_NAV" value="TRUE"/>
+			<!--<define name="USE_FLOW"/>-->
 		</load>
-    <load name="finken_wall_avoid.xml"/>
-<!--<load name="finken_rc_passthrough.xml"/>-->	
-</modules>
+
+		<load name="finken_ir_adc.xml">
+			<configure name="ADC_IR" value="ADC_3"/>
+		</load>
+		<load name="finken_wall_avoid.xml">
+			<configure name="WALL_AVOID_RC_SWITCH" value="RADIO_AUX3"/>
+		</load>
+		<load name="ws2801.xml"/>
+		<!--<load name="finken_rc_passthrough.xml"/>-->
+		<load name="logger_sd_spi_direct.xml">
+			<configure name="LOGGER_LED" value="5"/>
+			<configure name="SDLOGGER_DIRECT_CONTROL_SWITCH" value="RADIO_AUX2"/>
+			<configure name="SDLOGGER_DIRECT_SPI" value="SPI1"/>
+			<configure name="SDLOGGER_DIRECT_SPI_SLAVE" value="SPI_SLAVE1"/>
+		</load>
+	</modules>
 
 	<section name="FINKEN_WALL_AVOID" prefix="FINKEN_WALL_AVOID_"/>
 	<include href="conf/modules/finken_wall_avoid/common.xml"/>
-	<include href="conf/modules/finken_wall_avoid/$AC_ID_param.xml"/>
 
 	<!--
 		^Front^

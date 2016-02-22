@@ -106,9 +106,9 @@
  </section>
 
   <section name="STABILIZATION_RATE" prefix="STABILIZATION_RATE_">
-    <define name="SP_MAX_P" value="15000"/>
-    <define name="SP_MAX_Q" value="15000"/>
-    <define name="SP_MAX_R" value="15000"/>
+    <define name="SP_MAX_P" value="210" unit="deg/s"/>
+    <define name="SP_MAX_Q" value="210" unit="deg/s"/>
+    <define name="SP_MAX_R" value="210" unit="deg/s"/>
 
     <define name="GAIN_P" value="400"/>
     <define name="GAIN_Q" value="400"/>
@@ -192,10 +192,10 @@
  </section>
 
  <section name="SIMULATOR" prefix="NPS_">
-   <define name="ACTUATOR_NAMES" value="{&quot;ne_motor&quot;, &quot;se_motor&quot;, &quot;sw_motor&quot;, &quot;nw_motor&quot;}"/>
-   <define name="JSBSIM_INIT" value="&quot;reset00&quot;"/>
-   <define name="JSBSIM_MODEL" value="&quot;simple_x_quad_ccw&quot;"/>
-   <define name="SENSORS_PARAMS" value="&quot;nps_sensors_params_default.h&quot;"/>
+   <define name="ACTUATOR_NAMES" value="ne_motor, se_motor, sw_motor, nw_motor" type="string[]"/>
+   <define name="JSBSIM_INIT" value="reset00" type="string"/>
+   <define name="JSBSIM_MODEL" value="simple_x_quad_ccw" type="string"/>
+   <define name="SENSORS_PARAMS" value="nps_sensors_params_default.h" type="string"/>
  </section>
 
  <modules main_freq="512">
@@ -206,10 +206,9 @@
   <firmware name="rotorcraft">
     <target name="ap" board="lisa_s_1.0">
       <subsystem name="radio_control" type="superbitrf_rc">
-	<!-- To store the binding parameters for the superbit radio in your
-             airframe file uncomment the following three lines and set the
-             correct values based on the output of the superbitrf telemetry
-             messages. -->
+	    <!-- To store the binding parameters for the superbit radio in your -->
+        <!-- airframe file uncomment the following three lines and set the -->
+        <!-- correct values based on the output of the superbitrf telemetry messages. -->
         <!--define name="RADIO_TRANSMITTER_ID" value="3028580352"/--> <!-- Esden (1BitSquared) Dx6i: TX 1 -->
         <!--define name="RADIO_TRANSMITTER_CHAN" value="8"/>
         <define name="RADIO_TRANSMITTER_PROTOCOL" value="18"/-->

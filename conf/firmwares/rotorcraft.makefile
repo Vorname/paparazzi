@@ -78,14 +78,17 @@ endif
 #
 # Math functions
 #
+ifneq ($(TARGET), fbw)
 $(TARGET).srcs += math/pprz_geodetic_int.c math/pprz_geodetic_float.c math/pprz_geodetic_double.c math/pprz_trig_int.c math/pprz_orientation_conversion.c math/pprz_algebra_int.c math/pprz_algebra_float.c math/pprz_algebra_double.c
 
 $(TARGET).srcs += subsystems/settings.c
 $(TARGET).srcs += $(SRC_ARCH)/subsystems/settings_arch.c
+endif
 
 $(TARGET).srcs += subsystems/actuators.c
 $(TARGET).srcs += subsystems/commands.c
 
+ifneq ($(TARGET), fbw)
 $(TARGET).srcs += state.c
 
 #
@@ -103,19 +106,31 @@ $(TARGET).srcs += $(SRC_FIRMWARE)/guidance/guidance_h_ref.c
 $(TARGET).srcs += $(SRC_FIRMWARE)/guidance/guidance_v.c
 $(TARGET).srcs += $(SRC_FIRMWARE)/guidance/guidance_v_ref.c
 $(TARGET).srcs += $(SRC_FIRMWARE)/guidance/guidance_v_adapt.c
+$(TARGET).srcs += $(SRC_FIRMWARE)/guidance/guidance_flip.c
 
 include $(CFG_ROTORCRAFT)/navigation.makefile
+else
+$(TARGET).CFLAGS += -DFBW=1
+endif
 
+ifneq ($(TARGET), fbw)
 $(TARGET).srcs += $(SRC_FIRMWARE)/main.c
 $(TARGET).srcs += $(SRC_FIRMWARE)/autopilot.c
+else
+$(TARGET).srcs += $(SRC_FIRMWARE)/main_fbw.c
+endif
 
 ######################################################################
 ##
 ## COMMON HARDWARE SUPPORT FOR ALL TARGETS
 ##
 
+ifneq ($(TARGET), fbw)
 $(TARGET).srcs += mcu_periph/i2c.c
 $(TARGET).srcs += $(SRC_ARCH)/mcu_periph/i2c_arch.c
+endif
+
+include $(CFG_SHARED)/uart.makefile
 
 
 #
@@ -165,14 +180,6 @@ ifeq ($(BOARD), ardrone)
 ns_srcs += $(SRC_BOARD)/gpio_ardrone.c
 endif
 
-
-ns_srcs += mcu_periph/uart.c
-ns_srcs += $(SRC_ARCH)/mcu_periph/uart_arch.c
-ifeq ($(ARCH), linux)
-ns_srcs += $(SRC_ARCH)/serial_port.c
-endif
-
-
 #
 # add other subsystems to rotorcraft firmware in airframe file:
 #
@@ -193,3 +200,5 @@ endif
 
 ap.CFLAGS 		+= $(ns_CFLAGS)
 ap.srcs 		+= $(ns_srcs)
+fbw.CFLAGS 		+= $(ns_CFLAGS)
+fbw.srcs 		+= $(ns_srcs)

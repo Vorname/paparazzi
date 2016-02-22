@@ -5,9 +5,9 @@
    airframe="airframes/ovgu/fink3.xml"
    radio="radios/spektrum.xml"
    telemetry="telemetry/ovgu/free_flight.xml"
-   flight_plan="flight_plans/ovgu/Battery_Test.xml"
-   settings="settings/rotorcraft_basic.xml settings/control/rotorcraft_guidance.xml settings/control/stabilization_rate.xml settings/control/stabilization_att_int_quat.xml settings/estimation/ahrs_float_cmpl.xml"
-   settings_modules=""
+   flight_plan="flight_plans/ovgu/start_routine_test.xml"
+   settings="settings/rotorcraft_basic.xml settings/control/rotorcraft_guidance.xml settings/control/stabilization_rate.xml settings/control/stabilization_att_int_quat.xml settings/estimation/ahrs_float_cmpl.xml settings/estimation/body_to_imu.xml"
+   settings_modules="modules/ws2801.xml modules/logger_sd_spi_direct.xml"
    gui_color="#fe32ffff0000"
   />
   <aircraft
@@ -29,30 +29,30 @@
    telemetry="telemetry/ovgu/free_flight.xml"
    flight_plan="flight_plans/ovgu/free_flight.xml"
    settings="settings/rotorcraft_basic.xml settings/control/rotorcraft_guidance.xml settings/control/stabilization_att_int.xml settings/control/stabilization_rate.xml settings/estimation/ahrs_int_cmpl_quat.xml"
-   gui_color="white"
    settings_modules=""
+   gui_color="white"
   />
   <aircraft
    name="Quad_Lia_ovgu_02"
    ac_id="2"
-   airframe="airframes/ovgu/free_flight_flow.xml"
+   airframe="airframes/ovgu/free_flight.xml"
    radio="radios/spektrum.xml"
    telemetry="telemetry/ovgu/free_flight.xml"
    flight_plan="flight_plans/ovgu/free_flight.xml"
    settings="settings/rotorcraft_basic.xml settings/control/rotorcraft_guidance.xml settings/control/stabilization_att_int.xml settings/control/stabilization_rate.xml settings/estimation/ahrs_int_cmpl_quat.xml"
-   settings_modules=""
    gui_color="#b34c14805f44"
+   settings_modules=""
   />
   <aircraft
    name="Quad_Lia_ovgu_03"
    ac_id="3"
-   airframe="airframes/ovgu/free_flight_flow.xml"
+   airframe="airframes/ovgu/free_flight.xml"
    radio="radios/spektrum.xml"
    telemetry="telemetry/ovgu/free_flight.xml"
    flight_plan="flight_plans/ovgu/free_flight.xml"
    settings="settings/rotorcraft_basic.xml settings/control/rotorcraft_guidance.xml settings/control/stabilization_att_int.xml settings/control/stabilization_rate.xml settings/estimation/ahrs_int_cmpl_quat.xml"
-   settings_modules=""
    gui_color="#0000ffff006f"
+   settings_modules=""
   />
   <aircraft
    name="Quad_Lia_ovgu_04"

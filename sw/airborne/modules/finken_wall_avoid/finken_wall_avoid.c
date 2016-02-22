@@ -1,4 +1,7 @@
 #include <modules/finken_wall_avoid/finken_wall_avoid.h>
+#include "modules/finken_model/finken_model_sensors.h"
+#include "modules/finken_model/finken_model_system.h"
+#include "subsystems/radio_control.h"
 
 #define T 1.0f/FINKEN_WALL_AVOID_UPDATE_FREQ
 #define T1 FINKEN_WALL_AVOID_CONTROL_DELAY_TIME
@@ -9,14 +12,12 @@
 #define b0 Kp*(T-2.0f*Tv)/(T+2.0f*T1)
 #define b1 Kp*(T+2.0f*Tv)/(T+2.0f*T1)
 
+#ifndef WALL_AVOID_RC_SWITCH
+#define WALL_AVOID_RC_SWITCH RADIO_AUX3
+#endif
+
 static const float maxControlRoll  = FINKEN_WALL_AVOID_MAX_CONTROL;
 static const float maxControlPitch = FINKEN_WALL_AVOID_MAX_CONTROL;
-static const float guardDist       = FINKEN_WALL_AVOID_GUARD_DIST;
-static const float goalDist        = FINKEN_WALL_AVOID_GOAL_DIST;
-static const float freeDist        = FINKEN_WALL_AVOID_FREE_FACTOR * FINKEN_WALL_AVOID_GOAL_DIST;
-static const float maxDist         = FINKEN_WALL_AVOID_MAX_DIST;
-static const float rollOffset      = FINKEN_WALL_AVOID_ROLL_OFFSET;
-static const float pitchOffset     = FINKEN_WALL_AVOID_PITCH_OFFSET;
 
 float pitchError_k1, pitch_k1, rollError_k1, roll_k1;
 float pitchInDamped, rollInDamped;
@@ -30,37 +31,20 @@ static float rollControl(float rollError) {
 	return roll;
 }
 
-static float rollWallAvoid(float rollIn, float distXLeft, float distXRight) {
-	distXLeft = distXLeft<maxDist?distXLeft:maxDist;
-	distXRight  = distXRight<maxDist?distXRight:maxDist;
-	//float distXControlLeft = distXLeft>goalDist?freeDist:distXLeft;
-	//float distXControlRight  = distXRight>goalDist?freeDist:distXRight;
-	float distXControlDiff  = 0.0f;
-	//if (distXLeft<goalDist && distXRight <goalDist){
-	//	distXControlDiff  = 0.0f-(distXRight-distXLeft)/2.0;
-	//}
-	//else{
-		if (distXLeft<distXRight && distXLeft<goalDist*1.0){
-			distXControlDiff = -goalDist+distXLeft;
-		}
-		if (distXRight<distXLeft && distXRight<goalDist*1.0){
-			distXControlDiff = goalDist-distXRight;
-		}
-	//}
-	float newRoll = rollControl(distXControlDiff);
-	/*rollIn = (rollIn < -maxRCPitch) ? -maxRCPitch : rollIn;
-	rollIn = (rollIn > maxRCPitch)  ?  maxRCPitch : rollIn;
-	rollIn = (rollIn< deadRCPitch && rollIn > -deadRCPitch) ? 0.0f : rollIn;*/
-  	if (distXLeft < maxDist && rollIn > 0){
-		rollIn*=(distXLeft-guardDist)/(maxDist-guardDist);
-		rollIn=(rollIn<0.0)?0.0:rollIn;
-	}
-	if (distXRight < maxDist && rollIn < 0){
-		rollIn*=(distXRight-guardDist)/(maxDist-guardDist);
-		rollIn=(rollIn>0.0)?0.0:rollIn;
-	}
-	rollInDamped = rollIn;
-	return newRoll + rollIn + rollOffset;
+static float rollWallAvoid(float rollIn, float distY) {
+	/* Overwrite wall avoid controller if switch is not active */
+	if(radio_control.values[ WALL_AVOID_RC_SWITCH ] < 0)
+		return rollIn;
+	/* rollIn: rc-input roll-angle, distY: y-direction-error */
+	float newRoll = rollControl(distY);
+	/* mod variable for dampening */
+	float mod = ((distY<0?-distY:distY)-FINKEN_SONAR_DIFF_GUARD_DIST)/(FINKEN_SONAR_DIFF_FREE_DIST-FINKEN_SONAR_DIFF_GUARD_DIST);
+	mod = mod<0?0:mod;
+	mod = mod>1?1:mod;
+	if ((newRoll > 0 && rollIn < 0) || (newRoll < 0  && rollIn > 0)) 
+		rollIn*=mod;
+
+	return newRoll + rollIn;
 }
 
 static float pitchControl(float pitchError) {
@@ -72,38 +56,16 @@ static float pitchControl(float pitchError) {
 	return pitch;
 }
 
-static float pitchWallAvoid(float pitchIn, float distXFront, float distXBack) {
-	distXFront = distXFront<maxDist?distXFront:maxDist;
-	distXBack  = distXBack<maxDist?distXBack:maxDist;
-	//float distXControlFront = distXFront>goalDist?freeDist:distXFront;
-	//float distXControlBack  = distXBack>goalDist?freeDist:distXBack;
-	//float distXControlDiff  = 0.0f-(distXControlBack-distXControlFront);
-	float distXControlDiff  = 0.0f;
-	//if (distXFront<goalDist && distXBack <goalDist){
-	//	distXControlDiff  = 0.0f-(distXBack-distXFront)/2.0;
-	//}
-	//else{
-		if (distXFront<distXBack && distXFront<goalDist*1.0){
-			distXControlDiff = -goalDist+distXFront;
-		}
-		if (distXBack<distXFront && distXBack<goalDist*1.0){
-			distXControlDiff = goalDist-distXBack;
-		}
-	//}
-	float newPitch = pitchControl(distXControlDiff);
-	/*pitchIn = (pitchIn < -maxRCPitch) ? -maxRCPitch : pitchIn;
-	pitchIn = (pitchIn > maxRCPitch)  ?  maxRCPitch : pitchIn;
-	pitchIn = (pitchIn< deadRCPitch && pitchIn > -deadRCPitch) ? 0.0f : pitchIn;*/
-  	if (pitchIn > 0){
-		pitchIn*=(distXFront-guardDist)/(maxDist-guardDist);
-		pitchIn=(pitchIn)<0.0?0.0:pitchIn;
-	}
-  	if (pitchIn < 0){
-		pitchIn*=(distXBack-guardDist)/(maxDist-guardDist);
-		pitchIn=(pitchIn>0.0)?0.0:pitchIn;
-	}
-	pitchInDamped = pitchIn;
-	return newPitch + pitchIn + pitchOffset;
+static float pitchWallAvoid(float pitchIn, float distX) {
+	if(radio_control.values[ WALL_AVOID_RC_SWITCH ] < 0)
+		return pitchIn;
+	float newPitch = pitchControl(distX);
+	float mod = ((distX<0?-distX:distX)-FINKEN_SONAR_DIFF_GUARD_DIST)/(FINKEN_SONAR_DIFF_FREE_DIST-FINKEN_SONAR_DIFF_GUARD_DIST);
+	mod = mod<0?0:mod;
+	mod = mod>1?1:mod;
+  	if ((newPitch > 0 && pitchIn < 0) || (newPitch < 0  && pitchIn > 0))
+		pitchIn*=mod;
+	return newPitch + pitchIn;
 }
 
 void finken_wall_avoid_init() {
@@ -112,13 +74,14 @@ void finken_wall_avoid_init() {
 	rollError_k1  = 0.0f;
 	roll_k1       = 0.0f;
 		
-	register_periodic_telemetry(DefaultPeriodic, "FINKEN_WALL_AVOID", send_finken_wall_avoid_telemetry);
+	register_periodic_telemetry(DefaultPeriodic, PPRZ_MSG_ID_FINKEN_WALL_AVOID, send_finken_wall_avoid_telemetry);
 }
 
 void finken_wall_avoid_periodic() {
 
-	finken_actuators_set_point.pitch = pitchWallAvoid(finken_system_set_point.pitch, finken_sensor_model.distance_d_back/100.0, finken_sensor_model.distance_d_front/100.0);
-	finken_actuators_set_point.roll = rollWallAvoid(finken_system_set_point.roll, finken_sensor_model.distance_d_right/100.0, finken_sensor_model.distance_d_left/100.0);
+	finken_actuators_set_point.pitch = pitchWallAvoid(finken_system_set_point.pitch, finken_sensor_model.distance_diff_x/100.0);
+	finken_actuators_set_point.roll = rollWallAvoid(finken_system_set_point.roll, finken_sensor_model.distance_diff_y/100.0);
+	finken_actuators_set_point.yaw = finken_system_set_point.yaw;
 
 }
 

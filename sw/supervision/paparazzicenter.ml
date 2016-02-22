@@ -147,19 +147,6 @@ let quit_button_callback = fun gui ac_combo session_combo target_combo () ->
     2 -> quit_callback gui ac_combo session_combo target_combo ()
   | _ -> ()
 
-(* Run a command and return its results as a string. *)
-let read_process command =
-  let buffer_size = 2048 in
-  let buffer = Buffer.create buffer_size in
-  let string = String.create buffer_size in
-  let in_channel = Unix.open_process_in command in
-  let chars_read = ref 1 in
-  while !chars_read <> 0 do
-    chars_read := input in_channel string 0 buffer_size;
-    Buffer.add_substring buffer string 0 !chars_read
-  done;
-  ignore (Unix.close_process_in in_channel);
-  Buffer.contents buffer
 
 (************************** Main *********************************************)
 let () =
@@ -181,10 +168,7 @@ let () =
   gui#window#set_icon (Some paparazzi_pixbuf);
 
     (* version string with whitespace/newline at the end stripped *)
-  let version_str =
-    try
-      Str.replace_first (Str.regexp "[ \n]+$") "" (read_process (Env.paparazzi_src ^ "/paparazzi_version"))
-    with _ -> "UNKNOWN" in
+  let version_str = Env.get_paparazzi_version () in
   let build_str =
     try
       let f = open_in (Env.paparazzi_home ^ "/var/build_version.txt") in
@@ -210,7 +194,7 @@ let () =
 
   let ac_combo = AC.parse_conf_xml gui#vbox_ac
   and target_combo = Gtk_tools.combo ~width:50 ["sim";"fbw";"ap"] gui#vbox_target
-  and flash_combo = Gtk_tools.combo ~width:50 ["Default mode"] gui#vbox_flash in
+  and flash_combo = Gtk_tools.combo ~width:50 ["Default"] gui#vbox_flash in
 
   (Gtk_tools.combo_widget target_combo)#misc#set_sensitive false;
   (Gtk_tools.combo_widget flash_combo)#misc#set_sensitive false;
@@ -224,7 +208,7 @@ let () =
       tag#set_property (`BACKGROUND color);
       (color, tag))
       (* since tcl8.6 "green" refers to "darkgreen" and the former "green" is now "lime", but that is not available in older versions, so hardcode the color to #00ff00*)
-      ["red"; "#00ff00"; "orange"; "cyan"] in
+      ["red"; "#00ff00"; "orange"; "cyan"; "yellow"] in
   let tag_table = GText.tag_table () in
   List.iter (fun (_color, tag) -> tag_table#add tag#as_tag) background_tags;
   let buffer = GText.buffer ~tag_table () in
@@ -232,6 +216,7 @@ let () =
 
   let errors = "red", ["error:"; "error "; "no such file"; "undefined reference"; "failure"; "multiple definition"]
   and warnings = "orange", ["warning"]
+  and minor_warnings = "yellow", ["no srtm data found"]
   and info = "#00ff00", ["pragma message"; "info:"]
   and version = "cyan", ["paparazzi version"; "build aircraft"] in
 
@@ -241,7 +226,7 @@ let () =
       let s = String.concat "\\|" s in
       let s = ".*\\("^s^"\\)" in
       color, Str.regexp_case_fold s)
-      [errors; warnings; info; version] in
+      [errors; warnings; minor_warnings; info; version] in
   let compute_tags = fun s ->
     let rec loop = function
 	(color, regexp)::rs ->

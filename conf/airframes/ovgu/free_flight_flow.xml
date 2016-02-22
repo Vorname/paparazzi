@@ -10,6 +10,7 @@
       <subsystem name="radio_control" type="spektrum">
         <define name="RADIO_MODE" value="RADIO_FLAP"/>
         <define name="RADIO_KILL_SWITCH" value="RADIO_GEAR"/>
+				<define name="RADIO_CONTROL_SPEKTRUM_OLD_SIGNS"/>
 	<define name="SPEKTRUM_BIND_PIN_HIGH"/>
 	<define name="SPEKTRUM_BIND_PIN_PORT" value="GPIOC"/>
 	<define name="SPEKTRUM_BIND_PIN" value="GPIO12"/>
@@ -40,23 +41,14 @@
 
 	<modules>
 		<load name="sensor_filter.xml" />
-		<!-- currently brakes the copter
-		<load name="sonar_array_i2c.xml">
-			<define name="SONAR_I2C_DEV" value="i2c2"/>
-			<define name="USE_I2C2" />
-			<define name="I2C2_CLOCK_SPEED" value="5000" />
-		</load> -->
 		<load name="mavlink_decoder.xml">
 			<configure name="MAVLINK_PORT" value="UART2" />
 			<configure name="MAVLINK_BAUD" value="B115200" />
 		</load>
 		<load name="px4flow.xml" />
- 	  <!--<load name="finken_ir_adc.xml">
-       <configure name="ADC_IR" value="ADC_3"/>
-    </load>-->
     <load name="finken_model.xml">
+			<define name="NO_GPS_NEEDED_FOR_NAV" value="TRUE"/>
 			<define name="USE_FLOW"/>
-			<!--<define name="USE_SENSOR_TOWER"/>-->
 		</load>
     <load name="finken_rc_passthrough.xml"/>
 	</modules>

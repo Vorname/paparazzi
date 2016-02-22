@@ -9,12 +9,15 @@
 		#include "modules/finken_model/finken_model_actuators.h"
 		#include "modules/finken_model/finken_model_system.h"
 		#include "subsystems/electrical.h"
+		#include "modules/ws2801/ws2801.h"
 	</header>
 	<blocks>
 		<block name="default">
 			<set value="0" var="finken_system_model_control_height"/> 
-			<attitude pitch="0.0" roll="0.0" throttle="0.0" until="stage_time > 30" vmode="throttle" />
-			<deroute block="1"/>
+
+			<call fun="ws2801_deactivateLeds()"/>
+			<attitude pitch="0.0" roll="0.0" throttle="0.0" until="stage_time > 15" vmode="throttle" />
+			<deroute block="inair"/>
 		</block>
 
 		<!--<block key="t" name="Takeoff" strip_button="Takeoff" strip_icon="takeoff.png">
@@ -59,31 +62,14 @@
 
 	<block name="6">
 			<set value="0.6" var="finken_system_set_point.z"/> 
-			<set value="1" var="finken_system_model_control_height"/> 
-			<attitude pitch="finken_actuators_set_point.pitch" roll="finken_actuators_set_point.roll" yaw="finken_actuators_set_point.yaw" throttle="finken_actuators_set_point.thrust" until="stage_time > 2"        				vmode="throttle"/>
-			<deroute block="7"/>
-		</block>
-	<block name="7">
-			<set value="0.7" var="finken_system_set_point.z"/> 
-			<set value="1" var="finken_system_model_control_height"/> 
-			<attitude pitch="finken_actuators_set_point.pitch" roll="finken_actuators_set_point.roll" yaw="finken_actuators_set_point.yaw" throttle="finken_actuators_set_point.thrust" until="stage_time > 2"        				vmode="throttle"/>
-			<deroute block="8"/>
-		</block>
-	<block name="8">
-			<set value="0.8" var="finken_system_set_point.z"/> 
-			<set value="1" var="finken_system_model_control_height"/> 
-			<attitude pitch="finken_actuators_set_point.pitch" roll="finken_actuators_set_point.roll" yaw="finken_actuators_set_point.yaw" throttle="finken_actuators_set_point.thrust" until="stage_time > 2"        				vmode="throttle"/>
-			<deroute block="inair"/>
-		</block>
-
-		<block name="inair">
-			<set value="0.8" var="finken_system_set_point.z"/> 
-			<set value="1" var="finken_system_model_control_height"/> 
-			<attitude pitch="finken_actuators_set_point.pitch" roll="finken_actuators_set_point.roll" yaw="finken_actuators_set_point.yaw" throttle="finken_actuators_set_point.thrust" until="60 > electrical.vsupply" vmode="throttle"/>
+			<set value="1" var="finken_system_model_control_height"/>
+			<call fun="ws2801_activateLeds()"/>
+			<attitude pitch="finken_actuators_set_point.pitch" roll="finken_actuators_set_point.roll" throttle="finken_actuators_set_point.thrust" until="electrical.bat_low" vmode="throttle"/>
 			<deroute block="empty"/>
 		</block>
 
 		<block name="empty">
+			<call fun="ws2801_deactivateLeds()"/>
 			<set value="0" var="finken_system_model_control_height"/> 
 			<attitude pitch="0.0" roll="0.0" yaw="0.0" throttle="0.0" until="FALSE" vmode="throttle"/>
 		</block>

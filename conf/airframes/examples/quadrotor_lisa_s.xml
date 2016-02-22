@@ -106,9 +106,9 @@
 
 
   <section name="STABILIZATION_RATE" prefix="STABILIZATION_RATE_">
-    <define name="SP_MAX_P" value="15000"/>
-    <define name="SP_MAX_Q" value="15000"/>
-    <define name="SP_MAX_R" value="15000"/>
+    <define name="SP_MAX_P" value="210" unit="deg/s"/>
+    <define name="SP_MAX_Q" value="210" unit="deg/s"/>
+    <define name="SP_MAX_R" value="210" unit="deg/s"/>
 
     <define name="GAIN_P" value="400"/>
     <define name="GAIN_Q" value="400"/>
@@ -190,9 +190,9 @@
  </section>
 
  <section name="SIMULATOR" prefix="NPS_">
-   <define name="ACTUATOR_NAMES" value="{&quot;front_motor&quot;, &quot;back_motor&quot;, &quot;left_motor&quot;, &quot;right_motor&quot;}"/>
-   <define name="JSBSIM_MODEL" value="&quot;simple_quad&quot;"/>
-   <define name="SENSORS_PARAMS" value="&quot;nps_sensors_params_default.h&quot;"/>
+   <define name="ACTUATOR_NAMES" value="front_motor, back_motor, left_motor, right_motor" type="string[]"/>
+   <define name="JSBSIM_MODEL" value="simple_quad" type="string"/>
+   <define name="SENSORS_PARAMS" value="nps_sensors_params_default.h" type="string"/>
  </section>
 
  <modules main_freq="512">

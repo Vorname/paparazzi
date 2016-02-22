@@ -178,6 +178,10 @@ void init_ap(void)
   mcu_init();
 #endif /* SINGLE_MCU */
 
+#if defined(PPRZ_TRIG_INT_COMPR_FLASH)
+  pprz_trig_int_init();
+#endif
+
   /****** initialize and reset state interface ********/
 
   stateInit();
@@ -671,7 +675,7 @@ void monitor_task(void)
   kill_throttle |= launch && (dist2_to_home > Square(KILL_MODE_DISTANCE));
 
   if (!autopilot_flight_time &&
-      *stateGetHorizontalSpeedNorm_f() > MIN_SPEED_FOR_TAKEOFF) {
+      stateGetHorizontalSpeedNorm_f() > MIN_SPEED_FOR_TAKEOFF) {
     autopilot_flight_time = 1;
     launch = TRUE; /* Not set in non auto launch */
 #if DOWNLINK
@@ -699,7 +703,7 @@ void event_task_ap(void)
 
 #ifdef InsEvent
   TODO("calling InsEvent, remove me..")
-  InsEvent(NULL);
+  InsEvent();
 #endif
 
 #if USE_GPS

@@ -32,8 +32,8 @@
         </dl_setting>
 
         <dl_setting max="3" min="0" step="1" var="dc_autoshoot" values="STOP|PERIODIC|DISTANCE|EXT_TRIG">
-          <strip_button name="Start Autoshoot" icon="on.png" value="1" group="dcauto"/>
-          <strip_button name="Stop Autoshoot" icon="off.png" value="0" group="dcauto"/>
+          <strip_button name="Start Autoshoot" icon="dcstart.png" value="1" group="dcauto"/>
+          <strip_button name="Stop Autoshoot" icon="dcstop.png" value="0" group="dcauto"/>
         </dl_setting>
 
         <dl_setting max="60" min="0.1" step="0.5" var="dc_autoshoot_period" shortname="Periodic" param="DC_AUTOSHOOT_PERIOD" unit="sec"/>
@@ -63,17 +63,19 @@
   <event fun="digital_cam_uart_event()"/>
   <makefile target="sim">
     <file name="catia/serial.c"/>
+    <define name="UART5_DEV" value="ttyUSB0"/>
   </makefile>
-  <makefile>
+  <makefile target="ap|sim|nps">
     <define name="DIGITAL_CAM" />
     <file name="uart_cam_ctrl.c"/>
     <file name="catia/protocol.c"/>
     <file name="dc.c"/>
     <raw>
-$(TARGET).CFLAGS += -DCAMERA_LINK=$(CAMERA_PORT)
-$(TARGET).CFLAGS += -DUSE_$(CAMERA_PORT)
+CAMERA_PORT_LOWER=$(shell echo $(CAMERA_PORT) | tr A-Z a-z)
 $(TARGET).CFLAGS += -D$(CAMERA_PORT)_BAUD=B115200
     </raw>
+    <define name="USE_$(CAMERA_PORT)"/>
+    <define name="CAMERA_LINK" value="$(CAMERA_PORT_LOWER)"/>
   </makefile>
 </module>
 

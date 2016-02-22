@@ -46,8 +46,12 @@
 #include "subsystems/actuators/motor_mixing.h"
 #endif
 
+#if USE_IMU
 #include "subsystems/imu.h"
+#endif
+#if USE_GPS
 #include "subsystems/gps.h"
+#endif
 
 #if USE_BARO_BOARD
 #include "subsystems/sensors/baro.h"
@@ -156,21 +160,34 @@ STATIC_INLINE void main_init(void)
 {
   mcu_init();
 
+#if defined(PPRZ_TRIG_INT_COMPR_FLASH)
+  pprz_trig_int_init();
+#endif
+
   electrical_init();
 
   stateInit();
 
+#ifndef INTER_MCU_AP
   actuators_init();
+#else
+  intermcu_init();
+#endif
+
 #if USE_MOTOR_MIXING
   motor_mixing_init();
 #endif
 
+#ifndef INTER_MCU_AP
   radio_control_init();
+#endif
 
 #if USE_BARO_BOARD
   baro_init();
 #endif
+#if USE_IMU
   imu_init();
+#endif
 #if USE_AHRS_ALIGNER
   ahrs_aligner_init();
 #endif
@@ -197,6 +214,10 @@ STATIC_INLINE void main_init(void)
   downlink_init();
 #endif
 
+#ifdef INTER_MCU_AP
+  intermcu_init();
+#endif
+
   // register the timers for the periodic functions
   main_periodic_tid = sys_time_register_timer((1. / PERIODIC_FREQUENCY), NULL);
   modules_tid = sys_time_register_timer(1. / MODULES_FREQUENCY, NULL);
@@ -208,8 +229,13 @@ STATIC_INLINE void main_init(void)
   baro_tid = sys_time_register_timer(1. / BARO_PERIODIC_FREQUENCY, NULL);
 #endif
 
+#if USE_IMU
   // send body_to_imu from here for now
   AbiSendMsgBODY_TO_IMU_QUAT(1, orientationGetQuat_f(&imu.body_to_imu));
+#endif
+
+  // Do a failsafe check first
+  failsafe_check();
 }
 
 STATIC_INLINE void handle_periodic_tasks(void)
@@ -242,7 +268,9 @@ STATIC_INLINE void handle_periodic_tasks(void)
 STATIC_INLINE void main_periodic(void)
 {
 
+#if USE_IMU
   imu_periodic();
+#endif
 
   //FIXME: temporary hack, remove me
 #ifdef InsPeriodic
@@ -253,7 +281,11 @@ STATIC_INLINE void main_periodic(void)
   autopilot_periodic();
   /* set actuators     */
   //actuators_set(autopilot_motors_on);
+#ifndef INTER_MCU_AP
   SetActuatorsFromCommands(commands, autopilot_mode);
+#else
+  intermcu_set_actuators(commands, autopilot_mode);
+#endif
 
   if (autopilot_in_flight) {
     RunOnceEvery(PERIODIC_FREQUENCY, autopilot_flight_time++);
@@ -338,7 +370,14 @@ STATIC_INLINE void main_event(void)
     RadioControlEvent(autopilot_on_rc_frame);
   }
 
+#if USE_IMU
   ImuEvent();
+#endif
+
+#ifdef InsEvent
+  TODO("calling InsEvent, remove me..")
+  InsEvent();
+#endif
 
 #if USE_BARO_BOARD
   BaroEvent();

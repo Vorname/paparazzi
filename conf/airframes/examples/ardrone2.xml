@@ -32,6 +32,11 @@
     <load name="air_data.xml"/>
     <load name="geo_mag.xml"/>
     <!--load name="logger_file.xml"/-->
+    <!--
+    <load name="video_thread.xml">
+        <define name="VIDEO_THREAD_CAMERA" value="front_camera"/>
+    </load>
+    -->
     <!--load name="video_rtp_stream.xml"/-->
   </modules>
 
@@ -111,13 +116,12 @@
 
   <section name="STABILIZATION_RATE" prefix="STABILIZATION_RATE_">
     <!-- setpoints -->
-    <define name="SP_MAX_P" value="10000"/>
-    <define name="SP_MAX_Q" value="10000"/>
-    <define name="SP_MAX_R" value="10000"/>
+    <define name="SP_MAX_P" value="140" unit="deg/s"/>
+    <define name="SP_MAX_Q" value="140" unit="deg/s"/>
+    <define name="SP_MAX_R" value="140" unit="deg/s"/>
     <define name="DEADBAND_P" value="20"/>
     <define name="DEADBAND_Q" value="20"/>
     <define name="DEADBAND_R" value="200"/>
-    <define name="REF_TAU" value="4"/>
 
     <!-- feedback -->
     <define name="GAIN_P" value="400"/>
@@ -127,11 +131,6 @@
     <define name="IGAIN_P" value="75"/>
     <define name="IGAIN_Q" value="75"/>
     <define name="IGAIN_R" value="50"/>
-
-    <!-- feedforward -->
-    <define name="DDGAIN_P" value="300"/>
-    <define name="DDGAIN_Q" value="300"/>
-    <define name="DDGAIN_R" value="300"/>
   </section>
 
   <section name="STABILIZATION_ATTITUDE" prefix="STABILIZATION_ATTITUDE_">
@@ -197,9 +196,9 @@
   </section>
 
   <section name="SIMULATOR" prefix="NPS_">
-    <define name="ACTUATOR_NAMES" value="{&quot;nw_motor&quot;, &quot;ne_motor&quot;, &quot;se_motor&quot;, &quot;sw_motor&quot;}"/>
-    <define name="JSBSIM_MODEL" value="&quot;simple_ardrone2&quot;"/>
-    <define name="SENSORS_PARAMS" value="&quot;nps_sensors_params_ardrone2.h&quot;"/>
+    <define name="ACTUATOR_NAMES" value="nw_motor, ne_motor, se_motor, sw_motor" type="string[]"/>
+    <define name="JSBSIM_MODEL" value="simple_ardrone2" type="string"/>
+    <define name="SENSORS_PARAMS" value="nps_sensors_params_ardrone2.h" type="string"/>
   </section>
 
   <section name="AUTOPILOT">

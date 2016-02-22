@@ -115,9 +115,9 @@ void ins_gps_passthrough_init(void)
   INT32_VECT3_ZERO(ins_gp.ltp_accel);
 
 #if PERIODIC_TELEMETRY
-  register_periodic_telemetry(DefaultPeriodic, "INS", send_ins);
-  register_periodic_telemetry(DefaultPeriodic, "INS_Z", send_ins_z);
-  register_periodic_telemetry(DefaultPeriodic, "INS_REF", send_ins_ref);
+  register_periodic_telemetry(DefaultPeriodic, PPRZ_MSG_ID_INS, send_ins);
+  register_periodic_telemetry(DefaultPeriodic, PPRZ_MSG_ID_INS_Z, send_ins_z);
+  register_periodic_telemetry(DefaultPeriodic, PPRZ_MSG_ID_INS_REF, send_ins_ref);
 #endif
 }
 
@@ -149,24 +149,25 @@ static void gps_cb(uint8_t sender_id __attribute__((unused)),
                    uint32_t stamp __attribute__((unused)),
                    struct GpsState *gps_s)
 {
-  if (gps_s->fix == GPS_FIX_3D) {
-    if (!ins_gp.ltp_initialized) {
-      ins_reset_local_origin();
-    }
-
-    /* simply scale and copy pos/speed from gps */
-    struct NedCoor_i gps_pos_cm_ned;
-    ned_of_ecef_point_i(&gps_pos_cm_ned, &ins_gp.ltp_def, &gps_s->ecef_pos);
-    INT32_VECT3_SCALE_2(ins_gp.ltp_pos, gps_pos_cm_ned,
-                        INT32_POS_OF_CM_NUM, INT32_POS_OF_CM_DEN);
-    stateSetPositionNed_i(&ins_gp.ltp_pos);
-
-    struct NedCoor_i gps_speed_cm_s_ned;
-    ned_of_ecef_vect_i(&gps_speed_cm_s_ned, &ins_gp.ltp_def, &gps_s->ecef_vel);
-    INT32_VECT3_SCALE_2(ins_gp.ltp_speed, gps_speed_cm_s_ned,
-                        INT32_SPEED_OF_CM_S_NUM, INT32_SPEED_OF_CM_S_DEN);
-    stateSetSpeedNed_i(&ins_gp.ltp_speed);
+  if (gps_s->fix < GPS_FIX_3D) {
+    return;
   }
+  if (!ins_gp.ltp_initialized) {
+    ins_reset_local_origin();
+  }
+
+  /* simply scale and copy pos/speed from gps */
+  struct NedCoor_i gps_pos_cm_ned;
+  ned_of_ecef_point_i(&gps_pos_cm_ned, &ins_gp.ltp_def, &gps_s->ecef_pos);
+  INT32_VECT3_SCALE_2(ins_gp.ltp_pos, gps_pos_cm_ned,
+                      INT32_POS_OF_CM_NUM, INT32_POS_OF_CM_DEN);
+  stateSetPositionNed_i(&ins_gp.ltp_pos);
+
+  struct NedCoor_i gps_speed_cm_s_ned;
+  ned_of_ecef_vect_i(&gps_speed_cm_s_ned, &ins_gp.ltp_def, &gps_s->ecef_vel);
+  INT32_VECT3_SCALE_2(ins_gp.ltp_speed, gps_speed_cm_s_ned,
+                      INT32_SPEED_OF_CM_S_NUM, INT32_SPEED_OF_CM_S_DEN);
+  stateSetSpeedNed_i(&ins_gp.ltp_speed);
 }
 
 void ins_gps_passthrough_register(void)

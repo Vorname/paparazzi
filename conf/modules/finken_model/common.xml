@@ -2,7 +2,12 @@
 	<section name="FINKEN" prefix="FINKEN_" >
 		<define name="MAX_Z" value="3.0" />
 		<define name="MIN_Z" value="0.2" />
-		<define name="MAX_DIST" value="300" />
-		<define name="MIN_DIST" value="20" />
+		<define name="SONAR_MAX_DIST" value="300" />
+		<define name="SONAR_MIN_DIST" value="20" />
+		<define name="SONAR_LOW_PASS_SIZE" value="3" />
+		<define name="SONAR_DIFF_LOW_PASS_SIZE" value="1" />
+		<define name="SONAR_DIFF_GOAL_DIST" value="120" />
+		<define name="SONAR_DIFF_FREE_FACTOR" value="0.9" />
+		<define name="SONAR_DIFF_GUARD_FACTOR" value="0.7" />
 	</section>
 </airframe>

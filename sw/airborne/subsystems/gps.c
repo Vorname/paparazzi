@@ -76,7 +76,7 @@ static inline void send_svinfo_available(struct transport_tx *trans, struct link
   if (i >= gps.nb_channels) { i = 0; }
   // send SVINFO for all satellites while no GPS fix,
   // after 3D fix, send avialable sats if they were updated
-  if (gps.fix != GPS_FIX_3D) {
+  if (gps.fix < GPS_FIX_3D) {
     send_svinfo_id(trans, dev, i);
   } else if (gps.svinfos[i].cno != last_cnos[i]) {
     send_svinfo_id(trans, dev, i);
@@ -155,11 +155,11 @@ void gps_init(void)
 #endif
 
 #if PERIODIC_TELEMETRY
-  register_periodic_telemetry(DefaultPeriodic, "GPS", send_gps);
-  register_periodic_telemetry(DefaultPeriodic, "GPS_INT", send_gps_int);
-  register_periodic_telemetry(DefaultPeriodic, "GPS_LLA", send_gps_lla);
-  register_periodic_telemetry(DefaultPeriodic, "GPS_SOL", send_gps_sol);
-  register_periodic_telemetry(DefaultPeriodic, "SVINFO", send_svinfo);
+  register_periodic_telemetry(DefaultPeriodic, PPRZ_MSG_ID_GPS, send_gps);
+  register_periodic_telemetry(DefaultPeriodic, PPRZ_MSG_ID_GPS_INT, send_gps_int);
+  register_periodic_telemetry(DefaultPeriodic, PPRZ_MSG_ID_GPS_LLA, send_gps_lla);
+  register_periodic_telemetry(DefaultPeriodic, PPRZ_MSG_ID_GPS_SOL, send_gps_sol);
+  register_periodic_telemetry(DefaultPeriodic, PPRZ_MSG_ID_SVINFO, send_svinfo);
 #endif
 }
 
@@ -190,4 +190,11 @@ uint32_t gps_tow_from_sys_ticks(uint32_t sys_ticks)
   }
 
   return itow_now;
+}
+
+/**
+ * Default parser for GPS injected data
+ */
+void WEAK gps_inject_data(uint8_t packet_id __attribute__((unused)), uint8_t length __attribute__((unused)), uint8_t *data __attribute__((unused))){
+
 }

@@ -57,6 +57,8 @@ extern pprz_t nav_throttle_setpoint;
 extern float nav_pitch; /* Rad */
 extern float rc_pitch;
 extern float fp_pitch; /* Degrees */
+extern float fp_throttle; /* [0-1] */
+extern float fp_climb; /* m/s */
 
 extern float carrot_x, carrot_y;
 
@@ -133,7 +135,7 @@ extern void nav_circle_XY(float x, float y, float radius);
 /** True if x (in degrees) is close to the current QDR (less than 10 degrees)*/
 #define NavQdrCloseTo(x) CloseDegAngles(x, NavCircleQdr())
 
-#define NavCourseCloseTo(x) CloseDegAngles(x, DegOfRad(*stateGetHorizontalSpeedDir_f()))
+#define NavCourseCloseTo(x) CloseDegAngles(x, DegOfRad(stateGetHorizontalSpeedDir_f()))
 
 /*********** Navigation along a line *************************************/
 extern void nav_route_xy(float last_wp_x, float last_wp_y, float wp_x, float wp_y);

@@ -2,8 +2,6 @@
 	<section name="FINKEN_WALL_AVOID" prefix="FINKEN_WALL_AVOID_">
 		<define name="MAX_CONTROL" value="15.0"/>
 		<define name="GUARD_DIST"  value="0.7"/>
-		<define name="GOAL_DIST"   value="1.2"/>
-		<define name="FREE_FACTOR" value="0.799"/>
 		<define name="MAX_DIST"    value="1.5"/>
 		<!-- original 
 		<define name="UPDATE_FREQ"         value="5.0" />
@@ -20,5 +18,7 @@
 		<define name="CONTROL_HOLD_TIME"   value="2.29" />
 		<define name="CONTROL_GAIN"        value="3.65" />
 		<define name="CONTROL_DELAY_TIME"  value="0.213"/>
+		<define name="ROLL_OFFSET"         value="0.0" />
+		<define name="PITCH_OFFSET"        value="0.0" />
 	</section>
 </airframe>

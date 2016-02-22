@@ -1,17 +1,17 @@
 <!DOCTYPE airframe SYSTEM "../airframe.dtd">
 
 <!-- this is a quadrotor frame in X-configuration equiped with
-     * Autopilot:   ELLE0 1.0 with STM32F4    http://wiki.paparazziuav.org/wiki/ELLE0
-     * IMU:         MPU9250 & MS5611          http://wiki.paparazziuav.org/wiki/ELLE0#IMU
+     * Autopilot:   Elle0 1.2 with STM32F4    http://wiki.paparazziuav.org/wiki/Elle0
+     * IMU:         MPU9250 & MS5611          http://wiki.paparazziuav.org/wiki/Elle0#IMU
      * Actuators:   PWM motor controllers     http://wiki.paparazziuav.org/wiki/Subsystem/actuators#PWM
      * GPS:         Ublox                     http://wiki.paparazziuav.org/wiki/Subsystem/gps
      * RC:          two Spektrum sats         http://wiki.paparazziuav.org/wiki/Subsystem/radio_control#Spektrum
 -->
 
-<airframe name="Quadrotor ELLE0 pwm">
+<airframe name="Quadrotor Elle0 pwm">
 
   <firmware name="rotorcraft">
-    <target name="ap" board="elle0_1.0">
+    <target name="ap" board="elle0_1.2">
     </target>
 
     <target name="nps" board="pc">
@@ -110,13 +110,12 @@
 
   <section name="STABILIZATION_RATE" prefix="STABILIZATION_RATE_">
     <!-- setpoints -->
-    <define name="SP_MAX_P" value="10000"/>
-    <define name="SP_MAX_Q" value="10000"/>
-    <define name="SP_MAX_R" value="10000"/>
+    <define name="SP_MAX_P" value="140" unit="deg/s"/>
+    <define name="SP_MAX_Q" value="140" unit="deg/s"/>
+    <define name="SP_MAX_R" value="140" unit="deg/s"/>
     <define name="DEADBAND_P" value="20"/>
     <define name="DEADBAND_Q" value="20"/>
     <define name="DEADBAND_R" value="200"/>
-    <define name="REF_TAU" value="4"/>
 
     <!-- feedback -->
     <define name="GAIN_P" value="400"/>
@@ -126,11 +125,6 @@
     <define name="IGAIN_P" value="75"/>
     <define name="IGAIN_Q" value="75"/>
     <define name="IGAIN_R" value="50"/>
-
-    <!-- feedforward -->
-    <define name="DDGAIN_P" value="300"/>
-    <define name="DDGAIN_Q" value="300"/>
-    <define name="DDGAIN_R" value="300"/>
   </section>
 
 
@@ -196,9 +190,9 @@
   </section>
 
   <section name="SIMULATOR" prefix="NPS_">
-    <define name="ACTUATOR_NAMES"  value="{&quot;ne_motor&quot;, &quot;se_motor&quot;, &quot;sw_motor&quot;, &quot;nw_motor&quot;}"/>
-    <define name="JSBSIM_MODEL" value="&quot;simple_x_quad&quot;"/>
-    <define name="SENSORS_PARAMS" value="&quot;nps_sensors_params_default.h&quot;"/>
+    <define name="ACTUATOR_NAMES"  value="ne_motor, se_motor, sw_motor, nw_motor" type="string[]"/>
+    <define name="JSBSIM_MODEL" value="simple_x_quad" type="string"/>
+    <define name="SENSORS_PARAMS" value="nps_sensors_params_default.h" type="string"/>
     <!-- mode switch on joystick channel 5 (axis numbering starting at zero) -->
     <define name="JS_AXIS_MODE" value="4"/>
   </section>

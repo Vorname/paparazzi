@@ -34,10 +34,12 @@
 #include "math/pprz_algebra_int.h"
 
 struct sensor_model_s {
-  int16_t distance_d_front;
-  int16_t distance_d_right;
-  int16_t distance_d_back;
-  int16_t distance_d_left;
+  uint16_t distance_d_front;
+  uint16_t distance_d_right;
+  uint16_t distance_d_back;
+  uint16_t distance_d_left;
+  int16_t distance_diff_x;
+  int16_t distance_diff_y;
   struct Int32Vect3 pos;
   struct Int32Quat attitude;
   struct Int32Vect3 velocity;

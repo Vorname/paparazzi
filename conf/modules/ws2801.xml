@@ -1,0 +1,27 @@
+<!DOCTYPE module SYSTEM "module.dtd">
+
+<module name="ws2801">
+  <doc>
+    <description>
+      Driver for WS2801 based RGB LED strips.
+    </description>
+  </doc>
+	<settings>
+		<dl_settings>
+			<dl_settings name="Leds">
+				<dl_setting max="4"   min="0" step="1" var="ws2801_ledNr" module="ws2801/ws2801" shortname="Led Number" handler="update"/>
+				<dl_setting max="255" min="0" step="1" var="ws2801_red"   module="ws2801/ws2801" shortname="Red"/>
+				<dl_setting max="255" min="0" step="1" var="ws2801_green" module="ws2801/ws2801" shortname="Green"/>
+				<dl_setting max="255" min="0" step="1" var="ws2801_blue"  module="ws2801/ws2801" shortname="Blue"/>
+		</dl_settings>
+		</dl_settings>
+	</settings>
+  <header>
+    <file name="ws2801.h" />
+  </header>
+  <init fun="ws2801_init()" />
+	<event fun="ws2801_event()"/>
+  <makefile>
+    <file name="ws2801.c" />
+	</makefile>
+</module>

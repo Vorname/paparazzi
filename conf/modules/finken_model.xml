@@ -8,19 +8,23 @@
   </doc>
   <header>
     <file name="finken_model_sensors.h" />
+    <file name="finken_sonar_filter.h" />
     <file name="finken_model_system.h" />
     <file name="finken_model_actuators.h" />
   </header>
   <init fun="finken_sensor_model_init()" />
+  <init fun="finken_sonar_filter_init()" />
   <init fun="finken_system_model_init()" />
   <init fun="finken_actuators_model_init()" />
   <periodic fun="finken_sensor_model_periodic()" freq="30" />
 	<periodic fun="finken_system_model_periodic()" freq="30" />
 	<periodic fun="finken_actuators_model_periodic()" freq="30" />
+	<!--<periodic fun="finken_sonar_filter_periodic()" freq="10"/>-->
   <makefile>
     <file name="finken_model_sensors.c" />
     <file name="finken_model_system.c" />
     <file name="finken_model_actuators.c" />
+    <file name="finken_sonar_filter.c" />
 	</makefile>
 
 </module>

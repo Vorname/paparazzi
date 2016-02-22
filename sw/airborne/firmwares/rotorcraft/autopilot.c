@@ -49,7 +49,11 @@
 #if USE_GPS
 #include "subsystems/gps.h"
 #else
+#if NO_GPS_NEEDED_FOR_NAV
+#define GpsIsLost() FALSE
+#else
 #define GpsIsLost() TRUE
+#endif
 #endif
 
 #ifdef POWER_SWITCH_GPIO
@@ -163,6 +167,12 @@ static void send_alive(struct transport_tx *trans, struct link_device *dev)
   pprz_msg_send_ALIVE(trans, dev, AC_ID, 16, MD5SUM);
 }
 
+static void send_attitude(struct transport_tx *trans, struct link_device *dev)
+{
+  struct FloatEulers *att = stateGetNedToBodyEulers_f();
+  pprz_msg_send_ATTITUDE(trans, dev, AC_ID, &(att->phi), &(att->psi), &(att->theta));
+};
+
 #if USE_MOTOR_MIXING
 #include "subsystems/actuators/motor_mixing.h"
 #endif
@@ -178,7 +188,7 @@ static void send_status(struct transport_tx *trans, struct link_device *dev)
 #if USE_GPS
   uint8_t fix = gps.fix;
 #else
-  uint8_t fix = GPS_FIX_NONE;
+  uint8_t fix = 0;
 #endif
   uint16_t time_sec = sys_time.nb_sec;
   pprz_msg_send_ROTORCRAFT_STATUS(trans, dev, AC_ID,
@@ -186,7 +196,7 @@ static void send_status(struct transport_tx *trans, struct link_device *dev)
                                   &radio_control.status, &radio_control.frame_rate,
                                   &fix, &autopilot_mode,
                                   &autopilot_in_flight, &autopilot_motors_on,
-                                  &guidance_h_mode, &guidance_v_mode,
+                                  &guidance_h.mode, &guidance_v_mode,
                                   &electrical.vsupply, &time_sec);
 }
 
@@ -215,10 +225,10 @@ static void send_fp(struct transport_tx *trans, struct link_device *dev)
                               &(stateGetNedToBodyEulers_i()->phi),
                               &(stateGetNedToBodyEulers_i()->theta),
                               &(stateGetNedToBodyEulers_i()->psi),
-                              &guidance_h_pos_sp.y,
-                              &guidance_h_pos_sp.x,
+                              &guidance_h.sp.pos.y,
+                              &guidance_h.sp.pos.x,
                               &carrot_up,
-                              &guidance_h_heading_sp,
+                              &guidance_h.sp.heading,
                               &stabilization_cmd[COMMAND_THRUST],
                               &autopilot_flight_time);
 }
@@ -302,19 +312,20 @@ void autopilot_init(void)
   /* set startup mode, propagates through to guidance h/v */
   autopilot_set_mode(MODE_STARTUP);
 
-  register_periodic_telemetry(DefaultPeriodic, "AUTOPILOT_VERSION", send_autopilot_version);
-  register_periodic_telemetry(DefaultPeriodic, "ALIVE", send_alive);
-  register_periodic_telemetry(DefaultPeriodic, "ROTORCRAFT_STATUS", send_status);
-  register_periodic_telemetry(DefaultPeriodic, "ENERGY", send_energy);
-  register_periodic_telemetry(DefaultPeriodic, "ROTORCRAFT_FP", send_fp);
-  register_periodic_telemetry(DefaultPeriodic, "ROTORCRAFT_CMD", send_rotorcraft_cmd);
-  register_periodic_telemetry(DefaultPeriodic, "DL_VALUE", send_dl_value);
+  register_periodic_telemetry(DefaultPeriodic, PPRZ_MSG_ID_AUTOPILOT_VERSION, send_autopilot_version);
+  register_periodic_telemetry(DefaultPeriodic, PPRZ_MSG_ID_ALIVE, send_alive);
+  register_periodic_telemetry(DefaultPeriodic, PPRZ_MSG_ID_ROTORCRAFT_STATUS, send_status);
+  register_periodic_telemetry(DefaultPeriodic, PPRZ_MSG_ID_ATTITUDE, send_attitude);
+  register_periodic_telemetry(DefaultPeriodic, PPRZ_MSG_ID_ENERGY, send_energy);
+  register_periodic_telemetry(DefaultPeriodic, PPRZ_MSG_ID_ROTORCRAFT_FP, send_fp);
+  register_periodic_telemetry(DefaultPeriodic, PPRZ_MSG_ID_ROTORCRAFT_CMD, send_rotorcraft_cmd);
+  register_periodic_telemetry(DefaultPeriodic, PPRZ_MSG_ID_DL_VALUE, send_dl_value);
 #ifdef ACTUATORS
-  register_periodic_telemetry(DefaultPeriodic, "ACTUATORS", send_actuators);
+  register_periodic_telemetry(DefaultPeriodic, PPRZ_MSG_ID_ACTUATORS, send_actuators);
 #endif
 #ifdef RADIO_CONTROL
-  register_periodic_telemetry(DefaultPeriodic, "RC", send_rc);
-  register_periodic_telemetry(DefaultPeriodic, "ROTORCRAFT_RADIO_CONTROL", send_rotorcraft_rc);
+  register_periodic_telemetry(DefaultPeriodic, PPRZ_MSG_ID_RC, send_rc);
+  register_periodic_telemetry(DefaultPeriodic, PPRZ_MSG_ID_ROTORCRAFT_RADIO_CONTROL, send_rotorcraft_rc);
 #endif
 }
 
@@ -436,6 +447,12 @@ void autopilot_set_mode(uint8_t new_autopilot_mode)
         guidance_h_mode_changed(GUIDANCE_H_MODE_MODULE_SETTING);
 #endif
         break;
+      case AP_MODE_FLIP:
+        guidance_h_mode_changed(GUIDANCE_H_MODE_FLIP);
+        break;
+      case AP_MODE_GUIDED:
+        guidance_h_mode_changed(GUIDANCE_H_MODE_GUIDED);
+        break;
       default:
         break;
     }
@@ -482,6 +499,12 @@ void autopilot_set_mode(uint8_t new_autopilot_mode)
         guidance_v_mode_changed(GUIDANCE_V_MODE_MODULE_SETTING);
 #endif
         break;
+      case AP_MODE_FLIP:
+        guidance_v_mode_changed(GUIDANCE_V_MODE_FLIP);
+        break;
+      case AP_MODE_GUIDED:
+        guidance_v_mode_changed(GUIDANCE_V_MODE_GUIDED);
+        break;
       default:
         break;
     }
@@ -490,6 +513,41 @@ void autopilot_set_mode(uint8_t new_autopilot_mode)
 
 }
 
+bool_t autopilot_guided_goto_ned(float x, float y, float z, float heading)
+{
+  if (autopilot_mode == AP_MODE_GUIDED) {
+    guidance_h_set_guided_pos(x, y);
+    guidance_h_set_guided_heading(heading);
+    guidance_v_set_guided_z(z);
+    return TRUE;
+  }
+  return FALSE;
+}
+
+bool_t autopilot_guided_goto_ned_relative(float dx, float dy, float dz, float dyaw)
+{
+  if (autopilot_mode == AP_MODE_GUIDED && stateIsLocalCoordinateValid()) {
+    float x = stateGetPositionNed_f()->x + dx;
+    float y = stateGetPositionNed_f()->y + dy;
+    float z = stateGetPositionNed_f()->z + dz;
+    float heading = stateGetNedToBodyEulers_f()->psi + dyaw;
+    return autopilot_guided_goto_ned(x, y, z, heading);
+  }
+  return FALSE;
+}
+
+bool_t autopilot_guided_goto_body_relative(float dx, float dy, float dz, float dyaw)
+{
+  if (autopilot_mode == AP_MODE_GUIDED && stateIsLocalCoordinateValid()) {
+    float psi = stateGetNedToBodyEulers_f()->psi;
+    float x = stateGetPositionNed_f()->x + cosf(-psi) * dx + sinf(-psi) * dy;
+    float y = stateGetPositionNed_f()->y - sinf(-psi) * dx + cosf(-psi) * dy;
+    float z = stateGetPositionNed_f()->z + dz;
+    float heading = psi + dyaw;
+    return autopilot_guided_goto_ned(x, y, z, heading);
+  }
+  return FALSE;
+}
 
 void autopilot_check_in_flight(bool_t motors_on)
 {
@@ -497,8 +555,8 @@ void autopilot_check_in_flight(bool_t motors_on)
     if (autopilot_in_flight_counter > 0) {
       /* probably in_flight if thrust, speed and accel above IN_FLIGHT_MIN thresholds */
       if ((stabilization_cmd[COMMAND_THRUST] <= AUTOPILOT_IN_FLIGHT_MIN_THRUST) &&
-          (abs(stateGetSpeedNed_f()->z) < AUTOPILOT_IN_FLIGHT_MIN_SPEED) &&
-          (abs(stateGetAccelNed_f()->z) < AUTOPILOT_IN_FLIGHT_MIN_ACCEL)) {
+          (fabsf(stateGetSpeedNed_f()->z) < AUTOPILOT_IN_FLIGHT_MIN_SPEED) &&
+          (fabsf(stateGetAccelNed_f()->z) < AUTOPILOT_IN_FLIGHT_MIN_ACCEL)) {
         autopilot_in_flight_counter--;
         if (autopilot_in_flight_counter == 0) {
           autopilot_in_flight = FALSE;
@@ -538,14 +596,63 @@ void autopilot_set_motors_on(bool_t motors_on)
 }
 
 
+#define THRESHOLD_1_PPRZ (MIN_PPRZ / 2)
+#define THRESHOLD_2_PPRZ (MAX_PPRZ / 2)
+
+/** get autopilot mode as set by RADIO_MODE 3-way switch */
+static uint8_t ap_mode_of_3way_switch(void)
+{
+  if (radio_control.values[RADIO_MODE] > THRESHOLD_2_PPRZ) {
+    return autopilot_mode_auto2;
+  }
+  else if (radio_control.values[RADIO_MODE] > THRESHOLD_1_PPRZ) {
+    return MODE_AUTO1;
+  }
+  else {
+    return MODE_MANUAL;
+  }
+}
+
+/**
+ * Get autopilot mode from two 2way switches.
+ * RADIO_MODE switch just selectes between MANUAL and AUTO.
+ * If not MANUAL, the RADIO_AUTO_MODE switch selects between AUTO1 and AUTO2.
+ *
+ * This is mainly a cludge for entry level radios with no three-way switch,
+ * but two available two-way switches which can be used.
+ */
+#if defined RADIO_AUTO_MODE || defined(__DOXYGEN__)
+static uint8_t ap_mode_of_two_switches(void)
+{
+  if (radio_control.values[RADIO_MODE] < THRESHOLD_1_PPRZ) {
+    /* RADIO_MODE in MANUAL position */
+    return MODE_MANUAL;
+  }
+  else {
+    /* RADIO_MODE not in MANUAL position.
+     * Select AUTO mode bassed on RADIO_AUTO_MODE channel
+     */
+    if (radio_control.values[RADIO_AUTO_MODE] > THRESHOLD_2_PPRZ) {
+      return autopilot_mode_auto2;
+    }
+    else
+      return MODE_AUTO1;
+  }
+}
+#endif
+
 void autopilot_on_rc_frame(void)
 {
 
   if (kill_switch_is_on()) {
     autopilot_set_mode(AP_MODE_KILL);
   } else {
-    uint8_t new_autopilot_mode = 0;
-    AP_MODE_OF_PPRZ(radio_control.values[RADIO_MODE], new_autopilot_mode);
+#ifdef RADIO_AUTO_MODE
+    INFO("Using RADIO_AUTO_MODE to switch between AUTO1 and AUTO2.")
+    uint8_t new_autopilot_mode = ap_mode_of_two_switches();
+#else
+    uint8_t new_autopilot_mode = ap_mode_of_3way_switch();
+#endif
 
 #if USE_GPS
     /* don't enter NAV mode if GPS is lost (this also prevents mode oscillations) */

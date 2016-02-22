@@ -32,6 +32,10 @@
 #include "mcu_periph/link_device.h"
 #include "subsystems/datalink/telemetry.h"
 
+enum Sonars {
+	SONAR_START = 0, SONAR_FRONT = 0, SONAR_RIGHT, SONAR_BACK, SONAR_LEFT, SONAR_END
+};
+
 struct sonar_values_s {
 	uint16_t front;
 	uint16_t right;
@@ -43,7 +47,6 @@ extern struct sonar_values_s sonar_values;
 
 extern void sonar_array_i2c_init(void);
 extern void sonar_array_i2c_periodic(void);
-extern void sonar_array_i2c_event(void);
 extern void send_sonar_array_telemetry(struct transport_tx *trans, struct link_device *link);
 
 #endif

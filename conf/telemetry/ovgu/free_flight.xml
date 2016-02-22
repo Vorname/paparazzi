@@ -5,11 +5,8 @@
   <process name="Main">
 
     <mode name="default" key_press="d">
-      <!--<message name="HC_DEBUG"      period="0.04" />-->
-			<!--<message name="FINKEN_SYSTEM_MODEL"      period="3" />-->
       <message name="FINKEN_SENSOR_MODEL"      period="0.1" />
-		<message name="FINKEN_SYSTEM_SET_POINT"      period="3" />
-      <message name="FINKEN_ACTUATORS_MODEL"   period="3" />
+      <message name="FINKEN_ACTUATORS_MODEL"   period="0.2" />
       <message name="DL_VALUE"                 period="3"/>
       <message name="ROTORCRAFT_STATUS"        period="2"/>
       <message name="ROTORCRAFT_FP"            period="1"/>
@@ -18,13 +15,11 @@
       <message name="ROTORCRAFT_NAV_STATUS"    period="1"/>
       <message name="WP_MOVED"                 period="5"/>
       <message name="INS"                      period="5"/>
-      <message name="UART_ERRORS"              period="5"/>
-      <message name="FINKEN_IR_ADC"            period="1"/>
-      <message name="RC"            	       period="1"/>
+      <message name="RC"            	       period="0.5"/>
+      <message name="I2C_ERRORS"               period="4.1"/>
 		</mode>
 		<mode name="extended">
       <message name="FINKEN_SENSOR_MODEL"      period="2.0" />
-      <message name="FINKEN_SYSTEM_MODEL"      period="0.3" />
       <message name="FINKEN_ACTUATORS_MODEL"   period="2.0" />
       <message name="SONAR_ARRAY"              period="1.0"/>
       <message name="DL_VALUE"                 period="1.1"/>
@@ -38,9 +33,10 @@
       <!--<message name="INS"                      period="1.5"/>-->
       <message name="I2C_ERRORS"               period="4.1"/>
       <message name="UART_ERRORS"              period="3.1"/>
-      <message name="SUPERBITRF"               period="3"/>
-			<message name="GPS_INT"                  period="5.25"/>
-      <message name="PX4FLOW"                period="1"/>
+      <message name="GPS_INT"                  period="5.25"/>
+      <!--<message name="PX4FLOW"                period="1"/>-->
+		</mode>
+		<mode name="empty">
 		</mode>
 
     <mode name="finken_data">
@@ -100,10 +96,19 @@
       <message name="ROTORCRAFT_STATUS" period="1.2"/>
       <message name="DL_VALUE"          period="0.5"/>
       <message name="ALIVE"             period="0.9"/>
-      <message name="STAB_ATTITUDE"     period=".03"/>
-      <message name="STAB_ATTITUDE_REF" period=".03"/>
     </mode>
 
   </process>
+	<process name="Logger">
+    <mode name="default">
+      <message name="ROTORCRAFT_STATUS"      period="1.2"/>
+      <message name="DL_VALUE"               period="0.5"/>
+      <message name="ALIVE"                  period="2.1"/>
+      <message name="IMU_GYRO_SCALED"        period=".002"/>
+      <message name="IMU_ACCEL_SCALED"       period=".002"/>
+      <message name="IMU_MAG_SCALED"         period=".1"/>
+    </mode>
+  </process>
+
 
 </telemetry>

@@ -36,10 +36,14 @@
     <load name="agl_dist.xml">
       <define name="USE_SONAR"/>
     </load>
+    <load name="video_thread.xml">
+      <define name="VIDEO_THREAD_CAMERA" value="front_camera"/>
+    </load>
     <load name="video_rtp_stream.xml">
-      <configure name="VIEWVIDEO_USE_NC" value="TRUE"/>
+      <configure name="VIEWVIDEO_USE_NETCAT" value="FALSE"/>
     </load>
     <load name="rotorcraft_cam.xml"/>
+    <load name="bat_voltage_ardrone2.xml"/>
   </modules>
 
   <!-- include common control -->

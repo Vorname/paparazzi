@@ -27,7 +27,7 @@ void finken_ir_adc_init(void)
 
     adc_buf_channel(ADC_CHANNEL_IR, &ir_adc, DEFAULT_AV_NB_SAMPLE);
 
-    register_periodic_telemetry(DefaultPeriodic, "FINKEN_IR_ADC", send_finken_ir_adc_telemetry);
+    register_periodic_telemetry(DefaultPeriodic, PPRZ_MSG_ID_FINKEN_IR_ADC, send_finken_ir_adc_telemetry);
 }
 
 #define IR_SAMPLE_SIZE 6

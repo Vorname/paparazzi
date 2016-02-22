@@ -6,11 +6,15 @@
 <airframe name="Quadrotor Lia ovgu">
 
   <firmware name="rotorcraft">
+		<configuration name="FLASH_MODE" value="SWD"/>
     <target name="ap" board="lia_1.1">
       <subsystem name="radio_control" type="spektrum">
+				<define name="NO_GPS_NEEDED_FOR_NAV" value="TRUE"/>
         <define name="RADIO_MODE" value="RADIO_FLAP"/>
         <define name="RADIO_KILL_SWITCH" value="RADIO_GEAR"/>
-	<define name="SPEKTRUM_BIND_PIN_HIGH"/>
+				<define name="SPEKTRUM_BIND_PIN_HIGH"/>
+				<define name="SPEKTRUM_BIND_PIN_PORT" value="GPIOC"/>
+				<define name="SPEKTRUM_BIND_PIN" value="GPIO12"/>
 				<!--
         <configure name="USE_SECONDARY_SPEKTRUM_RECEIVER" value="1"/>
 				/-->
@@ -42,13 +46,8 @@
 			<!-- I2C Clockspeed of 5kHz because clock-stretching /-->
 			<define name="I2C2_CLOCK_SPEED" value="5000"/>
 		</load>
-		<!--<load name="mavlink_decoder.xml">
-			<configure name="MAVLINK_PORT" value="UART2" />
-			<configure name="MAVLINK_BAUD" value="B115200" />
-		</load>
-		<load name="px4flow.xml" />
-		<load name="nav_finken.xml" />-->
     <load name="finken_model.xml">
+			<define name="NO_GPS_NEEDED_FOR_NAV" value="TRUE"/>
 			<define name="USE_SONAR_TOWER"/>
 		</load>
 
@@ -57,6 +56,9 @@
     </load>
 	</modules>
 
+	<section name="FINKEN" prefix="FINKEN_"/>
+		<include href="conf/modules/finken_model/$AC_ID_param.xml"/>
+		<include href="conf/modules/finken_model/common.xml"/>
 	<!--
     ^Front^
 	NW			NE
@@ -79,9 +81,6 @@
     <axis name="THRUST" failsafe_value="0"/>
   </commands>
 
-	<section name="FINKEN" prefix="FINKEN_"/>
-	<include href="conf/modules/finken_model/$AC_ID_param.xml"/>
-	<include href="conf/modules/finken_model/common.xml"/>
 
   <section name="MIXING" prefix="MOTOR_MIXING_">
     <define name="TRIM_ROLL" value="0"/>

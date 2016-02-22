@@ -30,17 +30,25 @@ CHIMU_PARSER_DATA CHIMU_DATA;
 INS_FORMAT ins_roll_neutral;
 INS_FORMAT ins_pitch_neutral;
 
+static uint8_t ahrs_chimu_id = AHRS_COMP_ID_CHIMU;
+
 struct AhrsChimu ahrs_chimu;
+
+static bool_t ahrs_chimu_enable_output(bool_t enable)
+{
+  ahrs_chimu.is_enabled = enable;
+  return ahrs_chimu.is_enabled;
+}
 
 void ahrs_chimu_register(void)
 {
   ahrs_chimu_init();
-  /// @todo: provide enable function
-  ahrs_register_impl(NULL);
+  ahrs_register_impl(ahrs_chimu_enable_output);
 }
 
 void ahrs_chimu_init(void)
 {
+  ahrs_chimu.is_enabled = TRUE;
   ahrs_chimu.is_aligned = FALSE;
 
   uint8_t ping[7] = {CHIMU_STX, CHIMU_STX, 0x01, CHIMU_BROADCAST, MSG00_PING, 0x00, 0xE6 };
@@ -86,16 +94,23 @@ void parse_ins_msg(void)
           CHIMU_DATA.m_attitude.euler.phi -= 2 * M_PI;
         }
 
-        struct FloatEulers att = {
-          CHIMU_DATA.m_attitude.euler.phi,
-          CHIMU_DATA.m_attitude.euler.theta,
-          CHIMU_DATA.m_attitude.euler.psi
-        };
-        stateSetNedToBodyEulers_f(&att);
         ahrs_chimu.is_aligned = TRUE;
+
+        if (ahrs_chimu.is_enabled) {
+          struct FloatEulers att = {
+            CHIMU_DATA.m_attitude.euler.phi,
+            CHIMU_DATA.m_attitude.euler.theta,
+            CHIMU_DATA.m_attitude.euler.psi
+          };
+          stateSetNedToBodyEulers_f(&att);
+        }
+
 #if CHIMU_DOWNLINK_IMMEDIATE
-        DOWNLINK_SEND_AHRS_EULER(DefaultChannel, DefaultDevice, &CHIMU_DATA.m_attitude.euler.phi,
-                                 &CHIMU_DATA.m_attitude.euler.theta, &CHIMU_DATA.m_attitude.euler.psi);
+        DOWNLINK_SEND_AHRS_EULER(DefaultChannel, DefaultDevice,
+                                 &CHIMU_DATA.m_attitude.euler.phi,
+                                 &CHIMU_DATA.m_attitude.euler.theta,
+                                 &CHIMU_DATA.m_attitude.euler.psi,
+                                 &ahrs_chimu_id);
 #endif
 
       }

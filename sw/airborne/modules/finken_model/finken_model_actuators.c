@@ -39,8 +39,8 @@ void finken_actuators_model_init(void) {
 	finken_actuators_set_point.yaw    = 0;
 	finken_actuators_set_point.thrust = 0;
 
-	register_periodic_telemetry(DefaultPeriodic, "FINKEN_ACTUATORS_MODEL", send_finken_actuators_model_telemetry);
-	register_periodic_telemetry(DefaultPeriodic, "FINKEN_ACTUATORS_SET_POINT", send_finken_actuators_set_point_telemetry);
+	register_periodic_telemetry(DefaultPeriodic, PPRZ_MSG_ID_FINKEN_ACTUATORS_MODEL, send_finken_actuators_model_telemetry);
+	register_periodic_telemetry(DefaultPeriodic, PPRZ_MSG_ID_FINKEN_ACTUATORS_SET_POINT, send_finken_actuators_set_point_telemetry);
 }
 
 void finken_actuators_model_periodic(void) {

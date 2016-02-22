@@ -19,7 +19,7 @@
  */
 
 /**
- * @file board.c
+ * @file boards/ardrone/board.c
  *
  * ARDrone2 specific board initialization function.
  *
@@ -33,6 +33,29 @@
 #ifndef BAT_VOLTAGE_ARDRONE2_PERIODIC_FREQ
 #warning No battery voltage measurement available! Please add <load name="bat_voltage_ardrone2.xml"/> to your modules.
 #endif
+
+#include "peripherals/video_device.h"
+
+struct video_config_t front_camera = {
+  .w = 1280,
+  .h = 720,
+  .dev_name = "/dev/video1",
+  .subdev_name = NULL,
+  .format = V4L2_PIX_FMT_UYVY,
+  .buf_cnt = 10,
+  .filters = 0
+};
+
+struct video_config_t bottom_camera = {
+  .w = 320,
+  .h = 240,
+  .dev_name = "/dev/video2",
+  .subdev_name = NULL,
+  .format = V4L2_PIX_FMT_UYVY,
+  .buf_cnt = 10,
+  .filters = 0
+};
+
 
 void board_init(void)
 {

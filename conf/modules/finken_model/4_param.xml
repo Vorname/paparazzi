@@ -1,7 +1,7 @@
 <airframe>
 	<section name="FINKEN" prefix="FINKEN_">
 
-		<define name="THRUST_DEFAULT"             value="0.50" />
+		<define name="THRUST_DEFAULT"             value="0.45" />
 		<define name="THRUST_LOW"                 value="0.60" />
 		<define name="SYSTEM_UPDATE_FREQ"         value="30"   />
 		<define name="HEIGHT_CONTROL_HOLD_TIME"   value="1.5"  />
